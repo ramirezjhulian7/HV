@@ -149,8 +149,8 @@
   }
 
   .imageWrapper {
-    width: 250px;
-    height: 250px;
+    width: 220px;
+    height: 220px;
   }
 
   .info {
@@ -164,24 +164,52 @@
 
 @media (max-width: 768px) {
   .hero {
-    padding: var(--spacing-xl) 0;
+    padding: var(--spacing-2xl) 0 var(--spacing-xl);
+    min-height: auto;
+  }
+  
+  .hero::before {
+    width: 400px;
+    height: 400px;
+    top: -30%;
+    right: -30%;
   }
 
   .imageWrapper {
-    width: 200px;
-    height: 200px;
+    width: 180px;
+    height: 180px;
   }
 
   .name {
     font-size: var(--font-size-4xl);
+    margin-bottom: var(--spacing-sm);
   }
 
   .title {
     font-size: var(--font-size-xl);
+    margin-bottom: var(--spacing-md);
+  }
+  
+  .profile {
+    font-size: var(--font-size-base);
+    line-height: 1.8;
+    margin-bottom: var(--spacing-md);
   }
 
   .contact {
     grid-template-columns: 1fr;
     width: 100%;
+    gap: var(--spacing-md);
+  }
+  
+  .contactItem {
+    min-height: 56px;
+    padding: var(--spacing-md);
+    font-size: var(--font-size-base);
+    justify-content: center;
+  }
+  
+  .icon {
+    font-size: var(--font-size-2xl);
   }
 }

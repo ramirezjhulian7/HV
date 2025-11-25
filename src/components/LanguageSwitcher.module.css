@@ -39,6 +39,15 @@
   .switcher {
     top: var(--spacing-md);
     right: var(--spacing-md);
-    padding: var(--spacing-xs) var(--spacing-sm);
+    padding: var(--spacing-sm) var(--spacing-md);
+    min-height: 48px;
+  }
+  
+  .flag {
+    font-size: var(--font-size-xl);
+  }
+  
+  .text {
+    font-size: var(--font-size-sm);
   }
 }

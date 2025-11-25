@@ -168,28 +168,60 @@
 }
 
 @media (max-width: 768px) {
+  .experience {
+    padding: var(--spacing-xl) 0;
+  }
+  
   .timeline {
     padding-left: var(--spacing-md);
+    gap: var(--spacing-lg);
   }
 
   .item {
-    padding-left: var(--spacing-lg);
+    padding-left: var(--spacing-md);
+  }
+  
+  .card {
+    padding: var(--spacing-md);
   }
 
   .cardHeader {
     flex-direction: column;
+    gap: var(--spacing-md);
+    align-items: stretch;
+  }
+  
+  .company {
+    font-size: var(--font-size-lg);
+  }
+  
+  .position {
+    font-size: var(--font-size-base);
   }
 
   .projectBadge {
     align-items: flex-start;
     width: 100%;
+    padding: var(--spacing-sm) var(--spacing-md);
   }
 
   .projectName {
     text-align: left;
+    font-size: var(--font-size-sm);
+  }
+  
+  .description {
+    font-size: var(--font-size-sm);
+    line-height: 1.7;
+  }
+  
+  .highlight {
+    font-size: var(--font-size-sm);
+    line-height: 1.7;
   }
 
   .title {
     font-size: var(--font-size-3xl);
+    margin-bottom: var(--spacing-xl);
   }
 }

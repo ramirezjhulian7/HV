@@ -47,11 +47,21 @@
 
 @media (max-width: 768px) {
   .exportButton {
+    position: fixed;
     top: auto;
     bottom: var(--spacing-lg);
     right: var(--spacing-md);
     left: var(--spacing-md);
     width: calc(100% - var(--spacing-md) * 2);
     justify-content: center;
+    padding: var(--spacing-md) var(--spacing-lg);
+    font-size: var(--font-size-base);
+    min-height: 56px;
+    z-index: 1001;
+    box-shadow: var(--shadow-lg), 0 0 30px rgba(245, 158, 11, 0.4);
+  }
+  
+  .text {
+    font-size: var(--font-size-sm);
   }
 }

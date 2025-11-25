@@ -1,7 +1,21 @@
+import { useEffect, useState } from 'react';
 import Particles from '@tsparticles/react';
 import styles from './ParticlesBackground.module.css';
 
 export const ParticlesBackground = () => {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
   return (
     <Particles
       id="tsparticles"
@@ -13,24 +27,24 @@ export const ParticlesBackground = () => {
             value: 'transparent',
           },
         },
-        fpsLimit: 60,
+        fpsLimit: isMobile ? 30 : 60,
         interactivity: {
           events: {
             onClick: {
-              enable: true,
+              enable: !isMobile,
               mode: 'push',
             },
             onHover: {
-              enable: true,
+              enable: !isMobile,
               mode: 'attract',
             },
           },
           modes: {
             push: {
-              quantity: 4,
+              quantity: 2,
             },
             attract: {
-              distance: 200,
+              distance: 150,
               duration: 0.4,
             },
           },
@@ -43,7 +57,7 @@ export const ParticlesBackground = () => {
             color: '#00d4ff',
             distance: 150,
             enable: true,
-            opacity: 0.3,
+            opacity: isMobile ? 0.2 : 0.3,
             width: 1,
           },
           move: {
@@ -53,14 +67,14 @@ export const ParticlesBackground = () => {
               default: 'bounce',
             },
             random: false,
-            speed: 1,
+            speed: isMobile ? 0.5 : 1,
             straight: false,
           },
           number: {
             density: {
               enable: true,
             },
-            value: 80,
+            value: isMobile ? 30 : 80,
           },
           opacity: {
             value: 0.5,
@@ -69,7 +83,7 @@ export const ParticlesBackground = () => {
             type: 'circle',
           },
           size: {
-            value: { min: 1, max: 3 },
+            value: { min: 1, max: isMobile ? 2 : 3 },
           },
         },
         detectRetina: true,
@@ -77,4 +91,5 @@ export const ParticlesBackground = () => {
     />
   );
 };
+
 
