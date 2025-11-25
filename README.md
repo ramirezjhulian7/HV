@@ -147,7 +147,7 @@ Edita los archivos de traducción:
 - Inglés: `src/i18n/locales/en.json`
 
 ### Cambiar Foto de Perfil
-Reemplaza `src/assets/profile.png` con tu foto.
+Reemplaza `src/assets/profile.jpeg` con tu foto.
 
 ## 🌐 Ver en Producción
 

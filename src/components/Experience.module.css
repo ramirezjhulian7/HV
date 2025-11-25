@@ -1,6 +1,7 @@
 .experience {
   padding: var(--spacing-2xl) 0;
   position: relative;
+  z-index: 1;
 }
 
 .title {

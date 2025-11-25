@@ -30,7 +30,7 @@
     "backend": [".NET", ".NET Core", "Node.JS", "NestJS"],
     "frontend": ["Angular", "React", "HTML", "CSS", "Bootstrap"],
     "databases": ["MongoDB", "SQL Server", "MySQL", "CosmoDB"],
-    "cloud": ["Azure"],
+    "cloud": ["Azure", "AWS"],
     "architecture": ["Microservices", "Hexagonal Architecture"],
     "devops": ["Azure DevOps", "Kubernetes", "Rancher", "Git"],
     "testing": ["Unit Testing", "Integration Testing", "Functional Testing"],

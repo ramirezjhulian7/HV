@@ -1,15 +1,24 @@
 import { useTranslation } from 'react-i18next';
-import { motion } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'framer-motion';
+import { useRef } from 'react';
 import profileImage from '../assets/profile.jpeg';
 import styles from './Hero.module.css';
 
 export const Hero = () => {
   const { t } = useTranslation();
+  const ref = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ['start start', 'end start'],
+  });
+
+  const y = useTransform(scrollYProgress, [0, 1], ['0%', '50%']);
+  const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
 
   return (
-    <section className={styles.hero}>
+    <section className={styles.hero} ref={ref}>
       <div className="container">
-        <div className={styles.content}>
+        <motion.div className={styles.content} style={{ y, opacity }}>
           <motion.div
             className={styles.imageContainer}
             initial={{ opacity: 0, scale: 0.8 }}
@@ -38,7 +47,7 @@ export const Hero = () => {
               <motion.a
                 href={`mailto:${t('contact.email')}`}
                 className={styles.contactItem}
-                whileHover={{ scale: 1.05 }}
+                whileHover={{ scale: 1.05, y: -3 }}
                 whileTap={{ scale: 0.95 }}
               >
                 <span className={styles.icon}>📧</span>
@@ -50,7 +59,7 @@ export const Hero = () => {
                 target="_blank"
                 rel="noopener noreferrer"
                 className={styles.contactItem}
-                whileHover={{ scale: 1.05 }}
+                whileHover={{ scale: 1.05, y: -3 }}
                 whileTap={{ scale: 0.95 }}
               >
                 <span className={styles.icon}>💼</span>
@@ -59,7 +68,7 @@ export const Hero = () => {
 
               <motion.div
                 className={styles.contactItem}
-                whileHover={{ scale: 1.05 }}
+                whileHover={{ scale: 1.05, y: -3 }}
               >
                 <span className={styles.icon}>📱</span>
                 <span>{t('contact.phone')}</span>
@@ -67,14 +76,14 @@ export const Hero = () => {
 
               <motion.div
                 className={styles.contactItem}
-                whileHover={{ scale: 1.05 }}
+                whileHover={{ scale: 1.05, y: -3 }}
               >
                 <span className={styles.icon}>📍</span>
                 <span>{t('contact.location')}</span>
               </motion.div>
             </div>
           </motion.div>
-        </div>
+        </motion.div>
       </div>
     </section>
   );

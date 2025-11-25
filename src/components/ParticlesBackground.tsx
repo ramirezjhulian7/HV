@@ -1,19 +1,12 @@
-import { useCallback } from 'react';
 import Particles from '@tsparticles/react';
-import { loadSlim } from '@tsparticles/slim';
-import type { Engine } from '@tsparticles/engine';
 import styles from './ParticlesBackground.module.css';
 
 export const ParticlesBackground = () => {
-  const particlesInit = useCallback(async (engine: Engine) => {
-    await loadSlim(engine);
-  }, []);
-
   return (
     <Particles
       id="tsparticles"
       className={styles.particles}
-      init={particlesInit}
+      particlesLoaded={async () => {}}
       options={{
         background: {
           color: {
@@ -31,9 +24,6 @@ export const ParticlesBackground = () => {
               enable: true,
               mode: 'attract',
             },
-            resize: {
-              enable: true,
-            } as any,
           },
           modes: {
             push: {
@@ -69,9 +59,7 @@ export const ParticlesBackground = () => {
           number: {
             density: {
               enable: true,
-              width: 1920,
-              height: 1080,
-            } as any,
+            },
             value: 80,
           },
           opacity: {
@@ -89,3 +77,4 @@ export const ParticlesBackground = () => {
     />
   );
 };
+
