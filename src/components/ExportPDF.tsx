@@ -3,16 +3,37 @@ import { motion } from 'framer-motion';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import { useState } from 'react';
+import profileImage from '../assets/profile.jpeg';
 import styles from './ExportPDF.module.css';
 
 export const ExportPDF = () => {
   const { t } = useTranslation();
   const [isExporting, setIsExporting] = useState(false);
 
+  const getBase64Image = (img: HTMLImageElement): string => {
+    const canvas = document.createElement('canvas');
+    canvas.width = img.width;
+    canvas.height = img.height;
+    const ctx = canvas.getContext('2d');
+    if (ctx) {
+      ctx.drawImage(img, 0, 0);
+    }
+    return canvas.toDataURL('image/png');
+  };
+
   const handleExportPDF = async () => {
     setIsExporting(true);
     
     try {
+      // Load and convert profile image to base64
+      const img = new Image();
+      img.crossOrigin = 'anonymous';
+      img.src = profileImage;
+      await new Promise((resolve) => {
+        img.onload = resolve;
+      });
+      const profileImageBase64 = getBase64Image(img);
+
       // Create a temporary container for PDF content
       const pdfContainer = document.createElement('div');
       pdfContainer.style.position = 'absolute';
@@ -39,10 +60,15 @@ export const ExportPDF = () => {
       // Build PDF HTML content
       pdfContainer.innerHTML = `
         <div style="color: #1a1a1a;">
-          <!-- Header -->
-          <div style="text-align: center; margin-bottom: 30px; border-bottom: 3px solid #00d4ff; padding-bottom: 20px;">
-            <h1 style="margin: 0; font-size: 32px; color: #0a0e27; font-weight: 800;">${name}</h1>
-            <h2 style="margin: 10px 0 0 0; font-size: 20px; color: #7c3aed; font-weight: 600;">${title}</h2>
+          <!-- Header with Profile Image -->
+          <div style="display: flex; align-items: center; gap: 20px; margin-bottom: 25px; border-bottom: 3px solid #00d4ff; padding-bottom: 20px;">
+            <div style="flex-shrink: 0;">
+              <img src="${profileImageBase64}" alt="${name}" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 3px solid #00d4ff; box-shadow: 0 4px 12px rgba(0,0,0,0.1);" />
+            </div>
+            <div style="flex: 1;">
+              <h1 style="margin: 0; font-size: 28px; color: #0a0e27; font-weight: 800;">${name}</h1>
+              <h2 style="margin: 8px 0 0 0; font-size: 18px; color: #7c3aed; font-weight: 600;">${title}</h2>
+            </div>
           </div>
 
           <!-- Contact Info -->
@@ -55,7 +81,7 @@ export const ExportPDF = () => {
 
           <!-- Profile -->
           <div style="margin-bottom: 25px;">
-            <h3 style="color: #00d4ff; font-size: 16px; border-bottom: 2px solid #e0e0e0; padding-bottom: 8px; margin-bottom: 12px;">${t('sections.skills')}</h3>
+            <h3 style="color: #00d4ff; font-size: 16px; border-bottom: 2px solid #e0e0e0; padding-bottom: 8px; margin-bottom: 12px;">Perfil Profesional</h3>
             <p style="font-size: 11px; line-height: 1.7; text-align: justify;">${profile}</p>
           </div>
 
