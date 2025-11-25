@@ -1,0 +1,134 @@
+{
+  "name": "Jhulian Ramírez",
+  "title": "Software Architect Developer",
+  "profile": "Software developer with extensive experience in Angular, .NET, and TypeScript. Specialized in creating dynamic, scalable, and responsive web applications. Passionate about research and application of generative artificial intelligence, integrating emerging technologies to enhance innovative and user-centric solutions. Possesses solid training in leadership, teamwork, and assertive communication. Distinguished by creativity, analytical thinking, and strategic approach to solving problems efficiently. Enjoys collaborating with multidisciplinary teams to achieve common goals and generate real impact through technology.",
+  "exportPDF": "Export to PDF",
+  "exporting": "Generating PDF...",
+  "contact": {
+    "email": "ramirezjhulian7@gmail.com",
+    "linkedin": "https://www.linkedin.com/in/jhulianramirez/",
+    "phone": "+57 321 884 5427",
+    "location": "La Ceja, Antioquia, Colombia"
+  },
+  "sections": {
+    "skills": "Technical Skills",
+    "experience": "Work Experience",
+    "language": "Language",
+    "languages": "Languages",
+    "backend": "Backend",
+    "frontend": "Frontend",
+    "databases": "Databases",
+    "cloud": "Cloud",
+    "architecture": "Architecture",
+    "devops": "DevOps",
+    "testing": "Testing",
+    "emergingTech": "Emerging Tech"
+  },
+  "skills": {
+    "language": ["Spanish (Native)", "English (B2)"],
+    "languages": ["C#", "TypeScript", "JavaScript", "Python"],
+    "backend": [".NET", ".NET Core", "Node.JS", "NestJS"],
+    "frontend": ["Angular", "React", "HTML", "CSS", "Bootstrap"],
+    "databases": ["MongoDB", "SQL Server", "MySQL", "CosmoDB"],
+    "cloud": ["Azure"],
+    "architecture": ["Microservices", "Hexagonal Architecture"],
+    "devops": ["Azure DevOps", "Kubernetes", "Rancher", "Git"],
+    "testing": ["Unit Testing", "Integration Testing", "Functional Testing"],
+    "emergingTech": ["AI/ML", "LangChain", "IoT", "Blockchain"]
+  },
+  "experience": [
+    {
+      "company": "Asimetrix",
+      "position": "Senior Software Architect",
+      "period": "06/2025 - Present",
+      "project": "SmartFarm",
+      "description": "As a Senior Software Architect, I specialize in designing and implementing robust, scalable, and clean architectures that support high-quality software development. My role focuses on applying modern architectural paradigms such as Domain-Driven Design (DDD), Clean Architecture, and modular design patterns like SOLID, in order to foster maintainability and agility in projects.",
+      "highlights": [
+        "Actively integrate AI-powered tools into the development lifecycle, using them for code generation, intelligent peer reviews, automated testing, and refactoring assistance.",
+        "Provide mentorship and technical guidance to multidisciplinary teams. Lead code reviews and facilitate continuous improvement processes in Business Intelligence (BI), Machine Learning (ML), Artificial Intelligence (AI), and Data Engineering areas."
+      ]
+    },
+    {
+      "company": "Ceiba Software",
+      "position": "Architect Developer",
+      "period": "03/2021 - 05/2025",
+      "project": "Ciudadano 360° - Ruta N",
+      "projectPeriod": "11/2024 - 05/2025",
+      "description": "",
+      "highlights": [
+        "Designed and implemented an LLM-based agent for citizen interaction with Medellín's city hall",
+        "Integrated NestJS (backend) and React (frontend) technologies",
+        "Deployed the solution on Azure with a focus on scalability and security",
+        "Implemented the LangChain framework for AI task management",
+        "Optimized system performance in multiple use scenarios"
+      ]
+    },
+    {
+      "company": "Ceiba Software",
+      "position": "Architect Developer",
+      "period": "03/2021 - 05/2025",
+      "project": "XM RPM",
+      "projectPeriod": "06/2023 - 11/2023",
+      "description": "",
+      "highlights": [
+        "Developed interfaces for XML file upload with real-time validation",
+        "Implemented error handling mechanisms for data integrity",
+        "Optimized application performance (50% faster)",
+        "Created technical documentation and user training"
+      ]
+    },
+    {
+      "company": "Ceiba Software",
+      "position": "Architect Developer",
+      "period": "03/2021 - 05/2025",
+      "project": "Digital Credit Comfamiliar Risaralda",
+      "projectPeriod": "08/2022 - 05/2023",
+      "description": "",
+      "highlights": [
+        "Developed a digital credit platform using .NET/Angular",
+        "Implemented hexagonal architecture patterns",
+        "Established CI/CD pipelines with Azure DevOps",
+        "Created comprehensive technical documentation"
+      ]
+    },
+    {
+      "company": "Ceiba Software",
+      "position": "Architect Developer",
+      "period": "03/2021 - 05/2025",
+      "project": "Two Speed Architecture - EPM",
+      "projectPeriod": "04/2021 - 08/2022",
+      "description": "",
+      "highlights": [
+        "Implemented Fourth Industrial Revolution technologies (AI/IoT/Blockchain)",
+        "Developed a document management system",
+        "Led modernization of critical applications",
+        "Conducted experiments with technological prototypes"
+      ]
+    },
+    {
+      "company": "Salud Mental Integral SAMEIN",
+      "position": "IT Coordinator",
+      "period": "03/2015 - 02/2021",
+      "project": "Medisoft Medical System",
+      "projectPeriod": "03/2015 - 02/2021",
+      "description": "",
+      "highlights": [
+        "Developed clinical management modules (EHR, pharmacy, accounting)",
+        "Managed network infrastructure and cybersecurity",
+        "Implemented IP telephony system"
+      ]
+    },
+    {
+      "company": "Seguros Suramericana",
+      "position": "Scrum Intern and Product Owner",
+      "period": "09/2014 - 02/2015",
+      "project": "Life Annuity Management System",
+      "projectPeriod": "09/2014 - 02/2015",
+      "description": "",
+      "highlights": [
+        "Led the development lifecycle as Product Owner",
+        "Coordinated stakeholder requirements and team deliverables"
+      ]
+    }
+  ]
+}

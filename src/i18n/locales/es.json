@@ -1,0 +1,134 @@
+{
+  "name": "Jhulian Ramírez",
+  "title": "Arquitecto Desarrollador",
+  "profile": "Desarrollador de software con amplia experiencia en Angular, .NET y TypeScript. Especializado en la creación de aplicaciones web dinámicas, escalables y responsivas. Apasionado por la investigación y aplicación de inteligencias artificiales generativas, integrando tecnologías emergentes para potenciar soluciones innovadoras y centradas en el usuario. Cuenta con una sólida formación en liderazgo, trabajo en equipo y comunicación asertiva. Destacado por su creatividad, pensamiento analítico y enfoque estratégico para resolver problemas de forma eficiente. Disfruta colaborar con equipos multidisciplinarios para alcanzar objetivos comunes y generar impacto real a través de la tecnología.",
+  "exportPDF": "Exportar a PDF",
+  "exporting": "Generando PDF...",
+  "contact": {
+    "email": "ramirezjhulian7@gmail.com",
+    "linkedin": "https://www.linkedin.com/in/jhulianramirez/",
+    "phone": "+57 321 884 5427",
+    "location": "La Ceja, Antioquia, Colombia"
+  },
+  "sections": {
+    "skills": "Habilidades Técnicas",
+    "experience": "Experiencia Laboral",
+    "language": "Idioma",
+    "languages": "Lenguajes",
+    "backend": "Backend",
+    "frontend": "Frontend",
+    "databases": "Bases de Datos",
+    "cloud": "Cloud",
+    "architecture": "Arquitectura",
+    "devops": "DevOps",
+    "testing": "Testing",
+    "emergingTech": "Tecnologías Emergentes"
+  },
+  "skills": {
+    "language": ["Español (Nativo)", "Inglés (B2)"],
+    "languages": ["C#", "TypeScript", "JavaScript", "Python"],
+    "backend": [".NET", ".NET Core", "Node.JS", "NestJS"],
+    "frontend": ["Angular", "React", "HTML", "CSS", "Bootstrap"],
+    "databases": ["MongoDB", "SQL Server", "MySQL", "CosmoDB"],
+    "cloud": ["Azure"],
+    "architecture": ["Microservicios", "Arquitectura Hexagonal"],
+    "devops": ["Azure DevOps", "Kubernetes", "Rancher", "Git"],
+    "testing": ["Pruebas Unitarias", "Pruebas de Integración", "Pruebas Funcionales"],
+    "emergingTech": ["IA/ML", "LangChain", "IoT", "Blockchain"]
+  },
+  "experience": [
+    {
+      "company": "Asimetrix",
+      "position": "Arquitecto Senior de Software",
+      "period": "06/2025 - Presente",
+      "project": "SmartFarm",
+      "description": "Como Arquitecto Senior de Software, me especializo en diseñar e implementar arquitecturas robustas, escalables y limpias que respaldan el desarrollo de software de alta calidad. Mi rol se enfoca en aplicar paradigmas arquitectónicos modernos como el Diseño Guiado por el Dominio (DDD), Arquitectura Limpia y patrones de diseño modular como LIQUID, con el fin de fomentar la mantenibilidad y agilidad en los proyectos.",
+      "highlights": [
+        "Integro activamente herramientas impulsadas por inteligencia artificial en el ciclo de vida del desarrollo, utilizándolas para la generación de código, revisiones inteligentes entre pares, pruebas automatizadas y asistencia en refactorización.",
+        "Brindo mentoría y acompañamiento técnico a equipos multidisciplinarios. Lidero revisiones de código y facilito procesos de mejora continua en áreas de Inteligencia de Negocios (BI), Aprendizaje Automático (ML), Inteligencia Artificial (AI) e Ingeniería de Datos."
+      ]
+    },
+    {
+      "company": "Ceiba Software",
+      "position": "Arquitecto Desarrollador",
+      "period": "03/2021 - 05/2025",
+      "project": "Ciudadano 360° - Ruta N",
+      "projectPeriod": "11/2024 - 05/2025",
+      "description": "",
+      "highlights": [
+        "Diseñé e implementé un agente basado en LLM para interacción ciudadana con la alcaldía de Medellín",
+        "Integré tecnologías NestJS (backend) y React (frontend)",
+        "Desplegué la solución en Azure con enfoque en escalabilidad y seguridad",
+        "Implementé el framework LangChain para gestión de tareas de IA",
+        "Optimicé el rendimiento del sistema en múltiples escenarios de uso"
+      ]
+    },
+    {
+      "company": "Ceiba Software",
+      "position": "Arquitecto Desarrollador",
+      "period": "03/2021 - 05/2025",
+      "project": "XM RPM",
+      "projectPeriod": "06/2023 - 11/2023",
+      "description": "",
+      "highlights": [
+        "Desarrollé interfaces para carga de archivos XML con validación en tiempo real",
+        "Implementé mecanismos de manejo de errores para integridad de datos",
+        "Optimicé el rendimiento de la aplicación (50% más rápida)",
+        "Elaboré documentación técnica y capacitaciones para usuarios"
+      ]
+    },
+    {
+      "company": "Ceiba Software",
+      "position": "Arquitecto Desarrollador",
+      "period": "03/2021 - 05/2025",
+      "project": "Digital Credit Comfamiliar Risaralda",
+      "projectPeriod": "08/2022 - 05/2023",
+      "description": "",
+      "highlights": [
+        "Desarrollé una plataforma de crédito digital usando .NET/Angular",
+        "Implementé patrones de arquitectura hexagonal",
+        "Establecí pipelines de CI/CD con Azure DevOps",
+        "Creé documentación técnica integral"
+      ]
+    },
+    {
+      "company": "Ceiba Software",
+      "position": "Arquitecto Desarrollador",
+      "period": "03/2021 - 05/2025",
+      "project": "Two Speed Architecture - EPM",
+      "projectPeriod": "04/2021 - 08/2022",
+      "description": "",
+      "highlights": [
+        "Implementé tecnologías de la Cuarta Revolución Industrial (IA/IoT/Blockchain)",
+        "Desarrollé un sistema de gestión documental",
+        "Lideré la modernización de aplicaciones críticas",
+        "Realicé experimentos con prototipos tecnológicos"
+      ]
+    },
+    {
+      "company": "Salud Mental Integral SAMEIN",
+      "position": "Coordinador de TI",
+      "period": "03/2015 - 02/2021",
+      "project": "Sistema Médico Medisoft",
+      "projectPeriod": "03/2015 - 02/2021",
+      "description": "",
+      "highlights": [
+        "Desarrollé módulos de gestión clínica (HCE, farmacia, contabilidad)",
+        "Gestioné infraestructura de red y ciberseguridad",
+        "Implementé sistema de telefonía IP"
+      ]
+    },
+    {
+      "company": "Seguros Suramericana",
+      "position": "Practicante Scrum y Product Owner",
+      "period": "09/2014 - 02/2015",
+      "project": "Sistema de Gestión de Rentas Vitalicias",
+      "projectPeriod": "09/2014 - 02/2015",
+      "description": "",
+      "highlights": [
+        "Lideré el ciclo de vida del desarrollo como Product Owner",
+        "Coordiné requisitos de stakeholders y entregables del equipo"
+      ]
+    }
+  ]
+}

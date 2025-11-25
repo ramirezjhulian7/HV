@@ -1,0 +1,10 @@
+# Firebase
+.firebase
+.firebaserc
+firebase-debug.log
+firebase-debug.*.log
+
+# Build
+dist
+dist-ssr
+*.local
