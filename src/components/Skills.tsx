@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import styles from './Skills.module.css';
 
+
 const skillCategories = [
   { key: 'language', icon: '🌐' },
   { key: 'languages', icon: '💻' },
@@ -34,7 +35,7 @@ export const Skills = () => {
 
         <div className={styles.grid}>
           {skillCategories.map((category, index) => {
-            const skills = t(`skills.${category.key}`, { returnObjects: true }) as string[];
+            const skills = t(`skills.${category.key}`, { returnObjects: true }) as unknown as string[];
             
             return (
               <motion.div

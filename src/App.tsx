@@ -5,6 +5,7 @@ import { Experience } from './components/Experience';
 import { LanguageSwitcher } from './components/LanguageSwitcher';
 import { ExportPDF } from './components/ExportPDF';
 import { ParticlesBackground } from './components/ParticlesBackground';
+import { ScrollToTop } from './components/ScrollToTop';
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
       <ParticlesBackground />
       <LanguageSwitcher />
       <ExportPDF />
+      <ScrollToTop />
       <Hero />
       <Skills />
       <Experience />

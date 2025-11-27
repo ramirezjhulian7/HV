@@ -2,15 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import styles from './Experience.module.css';
 
-interface ExperienceItem {
-  company: string;
-  position: string;
-  period: string;
-  project: string;
-  projectPeriod?: string;
-  description: string;
-  highlights: string[];
-}
+import type { ExperienceItem } from '../types';
 
 export const Experience = () => {
   const { t } = useTranslation();
