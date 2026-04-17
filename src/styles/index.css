@@ -59,10 +59,24 @@
   --transition-base: 250ms ease-in-out;
   --transition-slow: 400ms ease-in-out;
   
-  /* Glass Effect */
-  --glass-bg: rgba(255, 255, 255, 0.05);
+  /* Glass Effect - Multi-tier system */
+  --glass-bg: rgba(255, 255, 255, 0.06);
+  --glass-bg-subtle: rgba(255, 255, 255, 0.03);
+  --glass-bg-medium: rgba(255, 255, 255, 0.08);
+  --glass-bg-strong: rgba(255, 255, 255, 0.12);
   --glass-border: rgba(255, 255, 255, 0.1);
-  --glass-blur: blur(10px);
+  --glass-border-light: rgba(255, 255, 255, 0.15);
+  --glass-border-accent: rgba(0, 212, 255, 0.15);
+  --glass-blur: blur(16px);
+  --glass-blur-heavy: blur(24px);
+  --glass-shine: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.1) 0%,
+    rgba(255, 255, 255, 0.02) 40%,
+    rgba(255, 255, 255, 0) 60%
+  );
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  --glass-shadow-hover: 0 12px 40px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.12);
 }
 
 /* Reset & Base Styles */
@@ -85,9 +99,10 @@ body {
   line-height: 1.6;
   color: var(--color-text-primary);
   background: var(--color-bg-primary);
-  background-image: 
-    radial-gradient(at 0% 0%, rgba(124, 58, 237, 0.15) 0px, transparent 50%),
-    radial-gradient(at 100% 100%, rgba(0, 212, 255, 0.15) 0px, transparent 50%);
+  background-image:
+    radial-gradient(at 0% 0%, rgba(124, 58, 237, 0.2) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, rgba(0, 212, 255, 0.18) 0px, transparent 50%),
+    radial-gradient(at 50% 50%, rgba(124, 58, 237, 0.06) 0px, transparent 70%);
   background-attachment: fixed;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -129,16 +144,31 @@ a:hover {
 .glass-card {
   background: var(--glass-bg);
   backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
   border: 1px solid var(--glass-border);
   border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-md);
+  box-shadow: var(--glass-shadow);
   transition: all var(--transition-base);
+  position: relative;
+  overflow: hidden;
+}
+
+.glass-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--glass-shine);
+  pointer-events: none;
+  border-radius: inherit;
 }
 
 .glass-card:hover {
   transform: translateY(-4px);
-  box-shadow: var(--shadow-lg), var(--shadow-glow);
-  border-color: rgba(0, 212, 255, 0.3);
+  box-shadow: var(--glass-shadow-hover), var(--shadow-glow);
+  border-color: var(--glass-border-accent);
 }
 
 .gradient-text {
@@ -179,6 +209,7 @@ a:hover {
   border: 1px solid var(--glass-border);
   color: var(--color-text-primary);
   backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
 }
 
 .btn-secondary:hover {
@@ -213,22 +244,51 @@ a:hover {
   50% { transform: translateY(-10px); }
 }
 
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes glassGlow {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.6; }
+}
+
+@keyframes ambientDrift {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  25% { transform: translate(30px, -20px) scale(1.05); }
+  50% { transform: translate(-20px, 15px) scale(0.95); }
+  75% { transform: translate(15px, 25px) scale(1.02); }
+}
+
 /* Scrollbar Styling */
 ::-webkit-scrollbar {
-  width: 10px;
+  width: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--color-bg-secondary);
+  background: rgba(10, 14, 39, 0.8);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--gradient-primary);
+  background: rgba(0, 212, 255, 0.3);
   border-radius: var(--radius-full);
+  border: 2px solid transparent;
+  background-clip: padding-box;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--gradient-secondary);
+  background: rgba(0, 212, 255, 0.5);
+  background-clip: padding-box;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
 
 /* Responsive */

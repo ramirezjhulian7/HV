@@ -7,8 +7,10 @@
   align-items: center;
   gap: var(--spacing-xs);
   padding: var(--spacing-sm) var(--spacing-md);
-  background: var(--gradient-accent);
-  border: none;
+  background: var(--glass-bg-strong);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid rgba(245, 158, 11, 0.25);
   border-radius: var(--radius-full);
   color: white;
   font-family: var(--font-display);
@@ -16,12 +18,32 @@
   font-weight: 700;
   cursor: pointer;
   transition: all var(--transition-base);
-  box-shadow: var(--shadow-md);
+  box-shadow: var(--glass-shadow), 0 0 15px rgba(245, 158, 11, 0.15);
+  overflow: hidden;
+  position: fixed;
+}
+
+.exportButton::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(245, 158, 11, 0.2) 0%,
+    rgba(239, 68, 68, 0.1) 50%,
+    rgba(245, 158, 11, 0) 100%
+  );
+  pointer-events: none;
+  border-radius: inherit;
 }
 
 .exportButton:hover:not(:disabled) {
-  box-shadow: var(--shadow-lg), 0 0 20px rgba(245, 158, 11, 0.5);
+  box-shadow: var(--glass-shadow-hover), 0 0 30px rgba(245, 158, 11, 0.3);
   transform: translateY(-2px);
+  border-color: rgba(245, 158, 11, 0.4);
 }
 
 .exportButton:disabled {
@@ -58,9 +80,9 @@
     font-size: var(--font-size-base);
     min-height: 56px;
     z-index: 1001;
-    box-shadow: var(--shadow-lg), 0 0 30px rgba(245, 158, 11, 0.4);
+    box-shadow: var(--glass-shadow-hover), 0 0 30px rgba(245, 158, 11, 0.25);
   }
-  
+
   .text {
     font-size: var(--font-size-sm);
   }
