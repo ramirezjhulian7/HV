@@ -5,263 +5,342 @@ import { useState } from 'react';
 import { FileDown, Loader } from 'lucide-react';
 import profileImage from '../assets/profile.jpeg';
 import styles from './ExportPDF.module.css';
-import type { ExperienceItem, Skills, ContactInfo } from '../types';
+import type { ExperienceItem, Skills } from '../types';
+
+const COLORS = {
+  sidebar: '#0f1629',
+  sidebarLight: '#1a2340',
+  accent: '#00d4ff',
+  accentDark: '#0099bb',
+  purple: '#7c3aed',
+  white: '#ffffff',
+  whiteOff: '#e2e8f0',
+  whiteMuted: '#94a3b8',
+  dark: '#0f172a',
+  darkText: '#334155',
+  darkMuted: '#64748b',
+  lightBg: '#f8fafc',
+  border: '#e2e8f0',
+};
 
 export const ExportPDF = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [isExporting, setIsExporting] = useState(false);
 
   const handleExportPDF = async () => {
     setIsExporting(true);
 
     try {
-      // 1. Initialize Document
-      const doc = new jsPDF({
-        orientation: 'portrait',
-        unit: 'mm',
-        format: 'a4',
-      });
-
-      // Constants & Config
+      const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
       const pageWidth = doc.internal.pageSize.getWidth();
       const pageHeight = doc.internal.pageSize.getHeight();
-      const margin = 20;
-      const contentWidth = pageWidth - margin * 2;
-      const primaryColor = '#00d4ff';
-      const secondaryColor = '#7c3aed';
-      const textColor = '#0a0e27';
-      const textLightColor = '#555555';
-      
-      let cursorY = margin;
+      const sidebarWidth = 65;
+      const mainLeft = sidebarWidth + 10;
+      const mainWidth = pageWidth - mainLeft - 12;
+      const sidebarPadding = 8;
+      const sidebarContentWidth = sidebarWidth - sidebarPadding * 2;
 
-      // Helper: Add Page Break if needed
-      const checkPageBreak = (heightNeeded: number) => {
-        if (cursorY + heightNeeded > pageHeight - margin) {
-          doc.addPage();
-          cursorY = margin;
+      let mainY = 18;
+      let sidebarY = 0;
+      let currentPage = 1;
+
+      const drawSidebar = () => {
+        doc.setFillColor(COLORS.sidebar);
+        doc.rect(0, 0, sidebarWidth, pageHeight, 'F');
+        doc.setFillColor(COLORS.sidebarLight);
+        doc.rect(0, 0, sidebarWidth, 2, 'F');
+      };
+
+      const drawAccentBar = () => {
+        doc.setFillColor(COLORS.accent);
+        doc.rect(sidebarWidth, 0, 1.5, pageHeight, 'F');
+      };
+
+      const addNewPage = () => {
+        doc.addPage();
+        currentPage++;
+        drawSidebar();
+        drawAccentBar();
+        mainY = 15;
+        sidebarY = 15;
+      };
+
+      const checkMainBreak = (needed: number) => {
+        if (mainY + needed > pageHeight - 12) {
+          addNewPage();
           return true;
         }
         return false;
       };
 
-      // Helper: Draw Text with wrapping
-      const drawText = (text: string, x: number, y: number, fontSize: number, color: string, fontStyle: 'normal' | 'bold' | 'italic' = 'normal', align: 'left' | 'center' | 'right' | 'justify' = 'left', maxWidth?: number) => {
+      const drawSidebarSection = (title: string, y: number): number => {
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(8);
+        doc.setTextColor(COLORS.accent);
+        doc.text(title.toUpperCase(), sidebarPadding, y);
+        y += 2;
+        doc.setDrawColor(COLORS.accent);
+        doc.setLineWidth(0.3);
+        doc.line(sidebarPadding, y, sidebarPadding + 20, y);
+        return y + 4;
+      };
+
+      const drawSidebarText = (text: string, y: number, color = COLORS.whiteOff, size = 7.5, style: 'normal' | 'bold' = 'normal'): number => {
+        doc.setFont('helvetica', style);
+        doc.setFontSize(size);
+        doc.setTextColor(color);
+        const lines = doc.splitTextToSize(text, sidebarContentWidth);
+        doc.text(lines, sidebarPadding, y);
+        return y + lines.length * (size * 0.38);
+      };
+
+      const drawMainHeading = (text: string) => {
+        checkMainBreak(14);
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(11);
+        doc.setTextColor(COLORS.dark);
+        doc.text(text.toUpperCase(), mainLeft, mainY);
+        mainY += 2;
+        doc.setDrawColor(COLORS.accent);
+        doc.setLineWidth(0.5);
+        doc.line(mainLeft, mainY, mainLeft + 35, mainY);
+        doc.setDrawColor(COLORS.border);
+        doc.setLineWidth(0.15);
+        doc.line(mainLeft + 35, mainY, mainLeft + mainWidth, mainY);
+        mainY += 5;
+      };
+
+      const drawWrapped = (text: string, x: number, fontSize: number, color: string, maxW: number, style: 'normal' | 'bold' | 'italic' = 'normal', lineH = 1.25): number => {
+        doc.setFont('helvetica', style);
         doc.setFontSize(fontSize);
         doc.setTextColor(color);
-        doc.setFont('helvetica', fontStyle);
-        
-        if (maxWidth) {
-          const lines = doc.splitTextToSize(text, maxWidth);
-          doc.text(lines, x, y, { align, maxWidth });
-          return lines.length * (fontSize * 0.3527 * 1.2); // Return height used (approx conversion pt to mm)
-        } else {
-          doc.text(text, x, y, { align });
-          return fontSize * 0.3527 * 1.2;
+        const lines = doc.splitTextToSize(text, maxW);
+        const lh = fontSize * 0.353 * lineH;
+        for (const line of lines) {
+          checkMainBreak(lh + 2);
+          doc.text(line, x, mainY);
+          mainY += lh;
         }
+        return lines.length * lh;
       };
 
-      // 2. Load Image
+      // --- PAGE 1 ---
+      drawSidebar();
+      drawAccentBar();
+
+      // Profile image
       const img = new Image();
       img.src = profileImage;
-      await new Promise((resolve) => {
-        img.onload = resolve;
-        img.onerror = resolve;
-      });
+      await new Promise((resolve) => { img.onload = resolve; img.onerror = resolve; });
 
-      // --- HEADER SECTION ---
-      // Profile Image
-      const imgSize = 35;
-      doc.addImage(img, 'JPEG', margin, cursorY, imgSize, imgSize);
-      
-      // Draw circle border around image (simulated with lines or just a rect for now, circle is harder in raw jspdf without plugins, keeping it simple or using a rounded rect clip if possible, but standard addImage is rect. Let's draw a border rect)
-      doc.setDrawColor(primaryColor);
-      doc.setLineWidth(1);
-      doc.rect(margin, cursorY, imgSize, imgSize);
+      const imgSize = 40;
+      const imgX = (sidebarWidth - imgSize) / 2;
+      sidebarY = 16;
 
-      // Name & Title
-      const textStartX = margin + imgSize + 10;
-      let headerCursor = cursorY + 10;
-      
-      const name = t('name');
-      const title = t('title');
-      
-      drawText(name, textStartX, headerCursor, 24, textColor, 'bold');
-      headerCursor += 10;
-      drawText(title, textStartX, headerCursor, 14, secondaryColor, 'bold');
-      
-      cursorY += imgSize + 10;
+      const cx = imgX + imgSize / 2;
+      const cy = sidebarY + imgSize / 2;
+      const r = imgSize / 2;
 
-      // Separator
-      doc.setDrawColor(primaryColor);
-      doc.setLineWidth(0.5);
-      doc.line(margin, cursorY, pageWidth - margin, cursorY);
-      cursorY += 10;
+      // Create circular image via offscreen canvas
+      const canvasSize = 400;
+      const canvas = document.createElement('canvas');
+      canvas.width = canvasSize;
+      canvas.height = canvasSize;
+      const ctx = canvas.getContext('2d')!;
+      ctx.beginPath();
+      ctx.arc(canvasSize / 2, canvasSize / 2, canvasSize / 2, 0, Math.PI * 2);
+      ctx.closePath();
+      ctx.clip();
+      ctx.drawImage(img, 0, 0, canvasSize, canvasSize);
+      const circularImgData = canvas.toDataURL('image/png');
 
-      // --- CONTACT INFO ---
-      const contact: ContactInfo = {
-        email: t('contact.email'),
-        phone: t('contact.phone'),
-        location: t('contact.location'),
-        linkedin: t('contact.linkedin'),
-      };
+      // Accent ring behind photo
+      doc.setFillColor(COLORS.accent);
+      doc.circle(cx, cy, r + 1.5, 'F');
 
-      const contactFontSize = 9;
-      const colWidth = contentWidth / 2;
-      
-      // Row 1
-      drawText(`Email: ${contact.email}`, margin, cursorY, contactFontSize, textColor);
-      drawText(`Phone: ${contact.phone}`, margin + colWidth, cursorY, contactFontSize, textColor);
-      cursorY += 6;
-      
-      // Row 2
-      drawText(`Location: ${contact.location}`, margin, cursorY, contactFontSize, textColor);
-      drawText(`LinkedIn: ${contact.linkedin}`, margin + colWidth, cursorY, contactFontSize, primaryColor);
-      cursorY += 15;
+      // Place circular image
+      doc.addImage(circularImgData, 'PNG', imgX, sidebarY, imgSize, imgSize);
 
-      // --- PROFILE ---
-      checkPageBreak(40);
-      drawText(t('sections.profile') || 'Perfil Profesional', margin, cursorY, 12, primaryColor, 'bold');
-      cursorY += 6;
-      doc.setDrawColor(0, 0, 0, 0.1); // Light grey
-      doc.line(margin, cursorY, pageWidth - margin, cursorY); // Underline section
-      cursorY += 6;
+      sidebarY += imgSize + 8;
 
-      const profileText = t('profile');
-      const profileHeight = drawText(profileText, margin, cursorY, 10, textColor, 'normal', 'justify', contentWidth);
-      cursorY += profileHeight + 10;
+      // Name in sidebar
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(12);
+      doc.setTextColor(COLORS.white);
+      const nameLines = doc.splitTextToSize(t('name'), sidebarContentWidth);
+      doc.text(nameLines, sidebarWidth / 2, sidebarY, { align: 'center' });
+      sidebarY += nameLines.length * 5 + 2;
 
-      // --- SKILLS ---
-      checkPageBreak(60);
-      drawText(t('sections.skills'), margin, cursorY, 12, primaryColor, 'bold');
-      cursorY += 6;
-      doc.line(margin, cursorY, pageWidth - margin, cursorY);
-      cursorY += 8;
+      // Title in sidebar
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(7.5);
+      doc.setTextColor(COLORS.accent);
+      const titleLines = doc.splitTextToSize(t('title'), sidebarContentWidth);
+      doc.text(titleLines, sidebarWidth / 2, sidebarY, { align: 'center' });
+      sidebarY += titleLines.length * 3.5 + 8;
 
+      // Divider
+      doc.setDrawColor(COLORS.sidebarLight);
+      doc.setLineWidth(0.3);
+      doc.line(sidebarPadding, sidebarY, sidebarWidth - sidebarPadding, sidebarY);
+      sidebarY += 6;
+
+      // Contact section
+      sidebarY = drawSidebarSection(t('pdf.contact'), sidebarY);
+
+      const contactItems = [
+        { label: t('contact.email') },
+        { label: t('contact.phone') },
+        { label: t('contact.location') },
+        { label: t('pdf.linkedinShort') },
+      ];
+
+      for (const item of contactItems) {
+        sidebarY = drawSidebarText(item.label, sidebarY, COLORS.whiteOff, 7);
+        sidebarY += 1.5;
+      }
+
+      sidebarY += 4;
+
+      // Skills in sidebar
       const skills = t('skills', { returnObjects: true }) as Skills;
       const skillKeys = Object.keys(skills) as (keyof Skills)[];
-      
-      let skillCol = 0; // 0 or 1
-      let skillRowStartY = cursorY;
-      
-      skillKeys.forEach((key) => {
-        const categoryTitle = t(`sections.${key}`);
+
+      for (const key of skillKeys) {
         const categorySkills = skills[key];
-        
-        if (!Array.isArray(categorySkills)) return;
+        if (!Array.isArray(categorySkills)) continue;
 
-        // Check space for category block (approx)
-        const blockHeight = 15 + (categorySkills.length / 2) * 5; // Rough estimate
-        
-        // If we are in col 0 and need break, do it. If col 1, we might need to reset Y
-        if (skillCol === 0 && checkPageBreak(blockHeight)) {
-           skillRowStartY = cursorY;
+        if (sidebarY > pageHeight - 20) {
+          // Skills overflow: continue on next page sidebar
+          break;
         }
-        
-        const xPos = skillCol === 0 ? margin : margin + colWidth;
-        let localY = skillCol === 0 ? cursorY : skillRowStartY;
 
-        // If col 1 and it doesn't fit, we might have an issue where col 0 is already drawn.
-        // For simplicity in this linear script, let's just do a single column list if it's easier, 
-        // OR strictly manage the two columns.
-        // Let's try a simpler grid: Just flow them and wrap.
-        
-        // Actually, let's stick to a cleaner list for PDF
-        // Category Title
-        drawText(categoryTitle, xPos, localY, 10, secondaryColor, 'bold');
-        localY += 5;
-        
-        // Skills string
-        const skillsStr = categorySkills.join(', ');
-        const skillsHeight = drawText(skillsStr, xPos, localY, 9, textLightColor, 'normal', 'left', colWidth - 5);
-        
-        localY += skillsHeight + 5;
+        sidebarY = drawSidebarSection(t(`sections.${key}`), sidebarY);
 
-        if (skillCol === 0) {
-          skillRowStartY = localY; // Track where col 0 ended
-          skillCol = 1;
-        } else {
-          cursorY = Math.max(cursorY, localY); // Advance main cursor to the lowest point
-          skillCol = 0;
-          // Add some spacing after the row
-          if (skillCol === 0) cursorY += 2; 
+        for (const skill of categorySkills) {
+          if (sidebarY > pageHeight - 8) break;
+          doc.setFont('helvetica', 'normal');
+          doc.setFontSize(7);
+          doc.setTextColor(COLORS.whiteMuted);
+          doc.text(skill, sidebarPadding + 3, sidebarY);
+
+          // Small dot
+          doc.setFillColor(COLORS.accent);
+          doc.circle(sidebarPadding + 0.8, sidebarY - 0.8, 0.6, 'F');
+          sidebarY += 3.2;
         }
-      });
-      
-      // Reset cursor if we ended on col 1
-      if (skillCol === 1) cursorY = Math.max(cursorY, skillRowStartY) + 5;
-      else cursorY += 5;
+        sidebarY += 2;
+      }
 
+      // --- MAIN CONTENT ---
 
-      // --- EXPERIENCE ---
-      cursorY += 5;
-      checkPageBreak(30);
-      drawText(t('sections.experience'), margin, cursorY, 12, primaryColor, 'bold');
-      cursorY += 6;
-      doc.line(margin, cursorY, pageWidth - margin, cursorY);
-      cursorY += 8;
+      // Profile section
+      drawMainHeading(t('sections.profile'));
+      drawWrapped(t('profile'), mainLeft, 9, COLORS.darkText, mainWidth, 'normal', 1.4);
+      mainY += 6;
 
+      // Experience section
+      drawMainHeading(t('sections.experience'));
       const experience = t('experience', { returnObjects: true }) as ExperienceItem[];
 
-      experience.forEach((exp) => {
-        // Calculate estimated height for this item to decide on page break
-        // Title + Position + Desc + Highlights
-        // This is hard to predict perfectly, but we can be conservative.
-        const estimatedHeight = 40; // Min height
-        checkPageBreak(estimatedHeight);
+      for (const exp of experience) {
+        checkMainBreak(25);
 
-        // Company & Date
-        drawText(exp.company, margin, cursorY, 11, textColor, 'bold');
-        drawText(exp.period, pageWidth - margin, cursorY, 9, textLightColor, 'normal', 'right');
-        cursorY += 5;
+        // Company row
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(10);
+        doc.setTextColor(COLORS.dark);
+        doc.text(exp.company, mainLeft, mainY);
+
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(8);
+        doc.setTextColor(COLORS.darkMuted);
+        doc.text(exp.period, mainLeft + mainWidth, mainY, { align: 'right' });
+        mainY += 4;
 
         // Position
-        drawText(exp.position, margin, cursorY, 10, secondaryColor, 'bold');
-        cursorY += 5;
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(8.5);
+        doc.setTextColor(COLORS.purple);
+        doc.text(exp.position, mainLeft, mainY);
+        mainY += 4;
 
-        // Project
+        // Project badge
         if (exp.project) {
-           drawText(`Project: ${exp.project}`, margin, cursorY, 9, textLightColor, 'italic');
-           cursorY += 5;
+          const projectLabel = `${t('pdf.project')}: ${exp.project}`;
+          const periodLabel = exp.projectPeriod ? ` (${exp.projectPeriod})` : '';
+          doc.setFont('helvetica', 'italic');
+          doc.setFontSize(7.5);
+          doc.setTextColor(COLORS.darkMuted);
+          doc.text(projectLabel + periodLabel, mainLeft, mainY);
+          mainY += 4;
         }
 
         // Description
         if (exp.description) {
-          const descHeight = drawText(exp.description, margin, cursorY, 9, textColor, 'normal', 'justify', contentWidth);
-          cursorY += descHeight + 3;
+          drawWrapped(exp.description, mainLeft, 8, COLORS.darkText, mainWidth, 'normal', 1.35);
+          mainY += 2;
         }
 
         // Highlights
-        exp.highlights.forEach((highlight) => {
-          checkPageBreak(10); // Check for each bullet
-          
-          // Bullet point
-          doc.setTextColor(secondaryColor);
-          doc.text('•', margin + 2, cursorY);
-          
-          // Text
-          const highlightHeight = drawText(highlight, margin + 6, cursorY, 9, textLightColor, 'normal', 'left', contentWidth - 10);
-          cursorY += highlightHeight + 2;
-        });
+        for (const highlight of exp.highlights) {
+          checkMainBreak(8);
 
-        cursorY += 8; // Spacing between items
-      });
+          doc.setFillColor(COLORS.accent);
+          doc.circle(mainLeft + 1.5, mainY - 0.8, 0.7, 'F');
 
-      // Metadata
+          doc.setFont('helvetica', 'normal');
+          doc.setFontSize(8);
+          doc.setTextColor(COLORS.darkText);
+          const hLines = doc.splitTextToSize(highlight, mainWidth - 6);
+          const lh = 3.2;
+          for (const line of hLines) {
+            checkMainBreak(lh + 1);
+            doc.text(line, mainLeft + 5, mainY);
+            mainY += lh;
+          }
+          mainY += 0.8;
+        }
+
+        mainY += 4;
+
+        // Thin separator between experiences
+        if (experience.indexOf(exp) < experience.length - 1) {
+          checkMainBreak(4);
+          doc.setDrawColor(COLORS.border);
+          doc.setLineWidth(0.15);
+          doc.line(mainLeft, mainY - 2, mainLeft + mainWidth, mainY - 2);
+          mainY += 2;
+        }
+      }
+
+      // Footer on each page
+      const totalPages = doc.getNumberOfPages();
+      for (let p = 1; p <= totalPages; p++) {
+        doc.setPage(p);
+        // Sidebar footer
+        doc.setFillColor(COLORS.sidebarLight);
+        doc.rect(0, pageHeight - 8, sidebarWidth, 8, 'F');
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(6);
+        doc.setTextColor(COLORS.whiteMuted);
+        doc.text(`${p} / ${totalPages}`, sidebarWidth / 2, pageHeight - 3.5, { align: 'center' });
+      }
+
       doc.setProperties({
-        title: `${name} - Resume`,
+        title: `${t('name')} - Resume`,
         subject: 'Resume / CV',
-        author: name,
+        author: t('name'),
         keywords: 'software, architect, developer, cv, resume',
-        creator: 'Jhulian Resume App'
+        creator: 'Jhulian Resume App',
       });
 
-      // Save
-      const fileName = `${name.replace(/\s+/g, '_')}_Resume.pdf`;
+      const langSuffix = i18n.language === 'es' ? 'ES' : 'EN';
+      const fileName = `${t('name').replace(/\s+/g, '_')}_CV_${langSuffix}.pdf`;
       doc.save(fileName);
 
     } catch (error) {
       console.error('Error generating PDF:', error);
-      alert('Error al generar el PDF. Por favor, intenta de nuevo.');
     } finally {
       setIsExporting(false);
     }
@@ -287,4 +366,3 @@ export const ExportPDF = () => {
     </motion.button>
   );
 };
-

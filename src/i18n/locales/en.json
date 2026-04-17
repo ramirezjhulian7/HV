@@ -25,6 +25,11 @@
     "phone": "+57 321 884 5427",
     "location": "La Ceja, Antioquia, Colombia"
   },
+  "pdf": {
+    "project": "Project",
+    "contact": "Contact",
+    "linkedinShort": "linkedin.com/in/jhulianramirez"
+  },
   "sections": {
     "profile": "Professional Profile",
     "skills": "Technical Skills",
