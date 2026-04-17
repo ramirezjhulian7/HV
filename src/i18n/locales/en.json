@@ -1,6 +1,21 @@
 {
   "name": "Jhulian Ramírez",
   "title": "Software Architect Developer",
+  "nav": {
+    "profile": "Profile",
+    "skills": "Skills",
+    "experience": "Experience"
+  },
+  "stats": {
+    "years": "Years of Experience",
+    "technologies": "Technologies",
+    "projects": "Projects",
+    "companies": "Companies"
+  },
+  "footer": {
+    "madeWith": "Made with",
+    "by": "by"
+  },
   "profile": "Software developer with extensive experience in Angular, .NET, and TypeScript. Specialized in creating dynamic, scalable, and responsive web applications. Passionate about research and application of generative artificial intelligence, integrating emerging technologies to enhance innovative and user-centric solutions. Possesses solid training in leadership, teamwork, and assertive communication. Distinguished by creativity, analytical thinking, and strategic approach to solving problems efficiently. Enjoys collaborating with multidisciplinary teams to achieve common goals and generate real impact through technology.",
   "exportPDF": "Export to PDF",
   "exporting": "Generating PDF...",

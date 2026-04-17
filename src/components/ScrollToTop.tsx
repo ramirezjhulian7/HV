@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { ArrowUp } from 'lucide-react';
 import styles from './ScrollToTop.module.css';
 
 export const ScrollToTop = () => {
@@ -7,15 +8,10 @@ export const ScrollToTop = () => {
 
   useEffect(() => {
     const toggleVisibility = () => {
-      if (window.scrollY > 300) {
-        setIsVisible(true);
-      } else {
-        setIsVisible(false);
-      }
+      setIsVisible(window.scrollY > 300);
     };
 
     window.addEventListener('scroll', toggleVisibility);
-
     return () => window.removeEventListener('scroll', toggleVisibility);
   }, []);
 
@@ -37,8 +33,9 @@ export const ScrollToTop = () => {
           exit={{ opacity: 0, scale: 0.5 }}
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
+          aria-label="Scroll to top"
         >
-          ↑
+          <ArrowUp size={20} strokeWidth={2} />
         </motion.button>
       )}
     </AnimatePresence>

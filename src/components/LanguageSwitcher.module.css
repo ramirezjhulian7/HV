@@ -1,6 +1,6 @@
 .switcher {
   position: fixed;
-  top: var(--spacing-lg);
+  top: calc(var(--spacing-lg) + 48px);
   right: var(--spacing-lg);
   z-index: 1000;
   display: flex;
@@ -19,7 +19,6 @@
   cursor: pointer;
   transition: all var(--transition-base);
   box-shadow: var(--glass-shadow);
-  position: fixed;
   overflow: hidden;
 }
 
@@ -41,9 +40,8 @@
   box-shadow: var(--glass-shadow-hover), 0 0 20px rgba(0, 212, 255, 0.15);
 }
 
-.flag {
-  font-size: var(--font-size-lg);
-  line-height: 1;
+.icon {
+  color: var(--color-accent-primary);
 }
 
 .text {
@@ -58,8 +56,9 @@
     min-height: 48px;
   }
 
-  .flag {
-    font-size: var(--font-size-xl);
+  .icon {
+    width: 20px;
+    height: 20px;
   }
 
   .text {

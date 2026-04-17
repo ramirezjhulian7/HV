@@ -172,8 +172,54 @@
 }
 
 .icon {
-  font-size: var(--font-size-xl);
   flex-shrink: 0;
+  color: var(--color-accent-primary);
+}
+
+.scrollIndicator {
+  position: absolute;
+  bottom: var(--spacing-lg);
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  color: var(--color-text-muted);
+  border: 1px solid var(--glass-border);
+  background: var(--glass-bg);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  animation: scrollBounce 2s ease-in-out infinite;
+  text-decoration: none;
+  transition: color var(--transition-base), border-color var(--transition-base);
+}
+
+.scrollIndicator:hover {
+  color: var(--color-accent-primary);
+  border-color: var(--glass-border-accent);
+}
+
+@keyframes scrollBounce {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50% { transform: translateX(-50%) translateY(8px); }
+}
+
+.cursor {
+  color: var(--color-accent-primary);
+  font-weight: 300;
+  margin-left: 2px;
+}
+
+.cursorBlink {
+  animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
 }
 
 @media (max-width: 1024px) {
@@ -249,7 +295,7 @@
     justify-content: center;
   }
 
-  .icon {
-    font-size: var(--font-size-2xl);
+  .scrollIndicator {
+    display: none;
   }
 }

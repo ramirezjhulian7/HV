@@ -1,6 +1,21 @@
 {
   "name": "Jhulian Ramírez",
   "title": "Arquitecto Desarrollador",
+  "nav": {
+    "profile": "Perfil",
+    "skills": "Habilidades",
+    "experience": "Experiencia"
+  },
+  "stats": {
+    "years": "Años de Experiencia",
+    "technologies": "Tecnologías",
+    "projects": "Proyectos",
+    "companies": "Empresas"
+  },
+  "footer": {
+    "madeWith": "Hecho con",
+    "by": "por"
+  },
   "profile": "Desarrollador de software con amplia experiencia en Angular, .NET y TypeScript. Especializado en la creación de aplicaciones web dinámicas, escalables y responsivas. Apasionado por la investigación y aplicación de inteligencias artificiales generativas, integrando tecnologías emergentes para potenciar soluciones innovadoras y centradas en el usuario. Cuenta con una sólida formación en liderazgo, trabajo en equipo y comunicación asertiva. Destacado por su creatividad, pensamiento analítico y enfoque estratégico para resolver problemas de forma eficiente. Disfruta colaborar con equipos multidisciplinarios para alcanzar objetivos comunes y generar impacto real a través de la tecnología.",
   "exportPDF": "Exportar a PDF",
   "exporting": "Generando PDF...",

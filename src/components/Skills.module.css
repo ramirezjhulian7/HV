@@ -85,8 +85,16 @@
   background: var(--gradient-primary);
 }
 
-.icon {
-  font-size: var(--font-size-2xl);
+.iconWrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-sm);
+  background: rgba(0, 212, 255, 0.1);
+  border: 1px solid rgba(0, 212, 255, 0.15);
+  color: var(--color-accent-primary);
   flex-shrink: 0;
 }
 

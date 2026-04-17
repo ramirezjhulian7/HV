@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import jsPDF from 'jspdf';
 import { useState } from 'react';
+import { FileDown, Loader } from 'lucide-react';
 import profileImage from '../assets/profile.jpeg';
 import styles from './ExportPDF.module.css';
 import type { ExperienceItem, Skills, ContactInfo } from '../types';
@@ -278,7 +279,7 @@ export const ExportPDF = () => {
       transition={{ delay: 0.7 }}
     >
       <span className={styles.icon}>
-        {isExporting ? '⏳' : '📄'}
+        {isExporting ? <Loader size={18} className={styles.spinner} /> : <FileDown size={18} />}
       </span>
       <span className={styles.text}>
         {isExporting ? t('exporting') : t('exportPDF')}

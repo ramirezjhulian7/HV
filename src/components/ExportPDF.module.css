@@ -1,7 +1,7 @@
 .exportButton {
   position: fixed;
-  top: var(--spacing-lg);
-  right: calc(var(--spacing-lg) + 140px);
+  top: calc(var(--spacing-lg) + 48px);
+  right: calc(var(--spacing-lg) + 100px);
   z-index: 1000;
   display: flex;
   align-items: center;
@@ -20,7 +20,6 @@
   transition: all var(--transition-base);
   box-shadow: var(--glass-shadow), 0 0 15px rgba(245, 158, 11, 0.15);
   overflow: hidden;
-  position: fixed;
 }
 
 .exportButton::before {
@@ -52,13 +51,18 @@
 }
 
 .icon {
-  font-size: var(--font-size-lg);
+  display: flex;
+  align-items: center;
   line-height: 1;
-  animation: pulse 2s ease-in-out infinite;
 }
 
-.exportButton:hover .icon {
-  animation: none;
+.spinner {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
 .text {

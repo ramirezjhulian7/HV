@@ -1,0 +1,30 @@
+.divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-md);
+  padding: var(--spacing-sm) 0;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.line {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(0, 212, 255, 0.3) 50%,
+    transparent 100%
+  );
+}
+
+.diamond {
+  width: 8px;
+  height: 8px;
+  background: var(--gradient-primary);
+  transform: rotate(45deg);
+  border-radius: 2px;
+  box-shadow: 0 0 12px rgba(0, 212, 255, 0.4);
+  flex-shrink: 0;
+}
