@@ -6,12 +6,10 @@
 }
 
 .glass {
+  composes: glass--chrome glass--edge-top from global;
   position: absolute;
   inset: 0;
-  background: rgba(10, 14, 39, 0.6);
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
-  border-top: 1px solid var(--glass-border);
+  border-radius: 0;
   pointer-events: none;
 }
 
@@ -30,25 +28,26 @@
 }
 
 .socialLink {
+  composes: glass--inline glass--circle from global;
   display: flex;
   align-items: center;
   justify-content: center;
   width: 44px;
   height: 44px;
-  border-radius: 50%;
-  background: var(--glass-bg-medium);
-  border: 1px solid var(--glass-border);
   color: var(--color-text-secondary);
-  transition: all var(--transition-base);
   text-decoration: none;
+  transition:
+    color var(--transition-base),
+    border-color var(--transition-base),
+    background-color var(--transition-base),
+    transform var(--transition-base);
 }
 
 .socialLink:hover {
-  color: var(--color-accent-primary);
+  color: #7de3ff;
   border-color: var(--glass-border-accent);
-  background: rgba(0, 212, 255, 0.1);
+  background-color: rgba(0, 212, 255, 0.1);
   transform: translateY(-3px);
-  box-shadow: 0 0 20px rgba(0, 212, 255, 0.15);
 }
 
 .copy {
@@ -60,14 +59,16 @@
 }
 
 .heart {
-  color: #ef4444;
+  color: #f87171;
   display: inline-block;
 }
 
+/* A token, not `opacity: 0.6` on the muted colour -- an opacity-dimmed value
+   has no contrast ratio you can actually verify. */
 .year {
   font-size: var(--font-size-xs);
-  color: var(--color-text-muted);
-  opacity: 0.6;
+  color: var(--color-text-dim);
+  font-variant-numeric: tabular-nums;
 }
 
 @media (max-width: 768px) {

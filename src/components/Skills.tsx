@@ -13,9 +13,11 @@ import {
   Zap,
 } from 'lucide-react';
 import styles from './Skills.module.css';
+import { DURATION, EASE, VIEWPORT, staggerFor } from '../motion/tokens';
 
 import type { ComponentType } from 'react';
 import type { LucideProps } from 'lucide-react';
+import type { Variants } from 'framer-motion';
 
 const skillCategories: { key: string; icon: ComponentType<LucideProps> }[] = [
   { key: 'language', icon: Globe },
@@ -30,6 +32,39 @@ const skillCategories: { key: string; icon: ComponentType<LucideProps> }[] = [
   { key: 'emergingTech', icon: Zap },
 ];
 
+/**
+ * One observer on the grid drives the whole arrival.
+ *
+ * Previously every card AND every pill carried its own `whileInView` plus an
+ * index-derived `delay`, so the delay started counting from that element's own
+ * entry: on mobile the grid is a single column, so the last category sat blank
+ * while fully on screen under the reader's cursor. Hoisting the trigger to the
+ * container and driving children with variants makes the cascade one beat, the
+ * way `waterfall-entry` specifies.
+ */
+const gridVariants: Variants = {
+  hidden: {},
+  visible: {
+    transition: { staggerChildren: staggerFor(skillCategories.length, 0.05) },
+  },
+};
+
+const cardVariants: Variants = {
+  hidden: { opacity: 0, y: 26 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    // power3.out: a smooth long-tail settle. `spring-pop-entrance` names bouncy
+    // overshoot the single clearest tell of amateur motion.
+    transition: { duration: DURATION.base, ease: EASE.outQuart },
+  },
+};
+
+const pillVariants: Variants = {
+  hidden: { opacity: 0, y: 8 },
+  visible: { opacity: 1, y: 0, transition: { duration: DURATION.fast, ease: EASE.outQuart } },
+};
+
 export const Skills = () => {
   const { t } = useTranslation();
 
@@ -37,62 +72,60 @@ export const Skills = () => {
     <section className={styles.skills} id="skills">
       <div className="container">
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 26 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
+          viewport={VIEWPORT}
+          transition={{ duration: DURATION.base, ease: EASE.outQuart }}
         >
           <h2 className={styles.title}>
             <span className="gradient-text">{t('sections.skills')}</span>
           </h2>
         </motion.div>
 
-        <div className={styles.grid}>
-          {skillCategories.map((category, index) => {
+        <motion.div
+          className={styles.grid}
+          variants={gridVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={VIEWPORT}
+        >
+          {skillCategories.map((category) => {
             const skills = t(`skills.${category.key}`, { returnObjects: true }) as unknown as string[];
+            const list = Array.isArray(skills) ? skills : [];
             const Icon = category.icon;
 
             return (
               <motion.div
                 key={category.key}
                 className={styles.category}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                whileHover={{ scale: 1.02 }}
+                variants={cardVariants}
+                whileHover={{ y: -3 }}
+                transition={{ duration: DURATION.fast, ease: EASE.outCubic }}
               >
                 <div className={styles.categoryHeader}>
                   <div className={styles.iconWrap}>
                     <Icon size={20} strokeWidth={1.5} />
                   </div>
-                  <h3 className={styles.categoryTitle}>
-                    {t(`sections.${category.key}`)}
-                  </h3>
+                  <h3 className={styles.categoryTitle}>{t(`sections.${category.key}`)}</h3>
                 </div>
 
-                <div className={styles.skillList}>
-                  {Array.isArray(skills) && skills.map((skill, skillIndex) => (
-                    <motion.span
-                      key={skillIndex}
-                      className={styles.skill}
-                      initial={{ opacity: 0, scale: 0.8 }}
-                      whileInView={{ opacity: 1, scale: 1 }}
-                      viewport={{ once: true }}
-                      transition={{
-                        duration: 0.3,
-                        delay: index * 0.1 + skillIndex * 0.05,
-                      }}
-                      whileHover={{ scale: 1.1, y: -2 }}
-                    >
+                <motion.div
+                  className={styles.skillList}
+                  variants={{
+                    hidden: {},
+                    visible: { transition: { staggerChildren: staggerFor(list.length, 0.025) } },
+                  }}
+                >
+                  {list.map((skill) => (
+                    <motion.span key={skill} className={styles.skill} variants={pillVariants}>
                       {skill}
                     </motion.span>
                   ))}
-                </div>
+                </motion.div>
               </motion.div>
             );
           })}
-        </div>
+        </motion.div>
       </div>
     </section>
   );

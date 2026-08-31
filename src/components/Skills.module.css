@@ -17,52 +17,30 @@
   gap: var(--spacing-lg);
 }
 
+/* Rack focus: attending to one card pushes the other nine back so ten panels
+   of identical visual weight stop competing. Dim only -- a `filter: blur()`
+   over an element that already carries `backdrop-filter` forces the backdrop
+   to re-rasterise every frame, times nine, on every pointer move. */
+@media (hover: hover) and (pointer: fine) {
+  .grid:hover .category,
+  .grid:focus-within .category {
+    opacity: 0.55;
+  }
+
+  .grid:hover .category:hover,
+  .grid:focus-within .category:focus-within {
+    opacity: 1;
+  }
+}
+
 .category {
-  background: var(--glass-bg-medium);
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius-lg);
+  composes: glass glass--interactive from global;
   padding: var(--spacing-lg);
-  transition: all var(--transition-base);
-  box-shadow: var(--glass-shadow);
-  position: relative;
-  overflow: hidden;
-}
-
-.category::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: var(--glass-shine);
-  pointer-events: none;
-  border-radius: inherit;
-}
-
-.category::after {
-  content: '';
-  position: absolute;
-  top: -50%;
-  right: -50%;
-  width: 100%;
-  height: 100%;
-  background: radial-gradient(circle, rgba(0, 212, 255, 0.04) 0%, transparent 70%);
-  pointer-events: none;
-  transition: opacity var(--transition-base);
-  opacity: 0;
-}
-
-.category:hover {
-  border-color: var(--glass-border-accent);
-  box-shadow: var(--glass-shadow-hover), 0 0 30px rgba(0, 212, 255, 0.1);
-  transform: translateY(-4px);
-}
-
-.category:hover::after {
-  opacity: 1;
+  transition:
+    box-shadow var(--transition-base),
+    border-color var(--transition-base),
+    background-color var(--transition-base),
+    opacity var(--transition-base);
 }
 
 .categoryHeader {
@@ -86,14 +64,13 @@
 }
 
 .iconWrap {
+  composes: glass--well from global;
   display: flex;
   align-items: center;
   justify-content: center;
   width: 36px;
   height: 36px;
   border-radius: var(--radius-sm);
-  background: rgba(0, 212, 255, 0.1);
-  border: 1px solid rgba(0, 212, 255, 0.15);
   color: var(--color-accent-primary);
   flex-shrink: 0;
 }
@@ -112,25 +89,22 @@
 }
 
 .skill {
+  composes: glass--inline from global;
   display: inline-block;
   padding: var(--spacing-xs) var(--spacing-sm);
-  background: rgba(0, 212, 255, 0.06);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border: 1px solid rgba(0, 212, 255, 0.15);
-  border-radius: var(--radius-full);
   color: var(--color-text-secondary);
   font-size: var(--font-size-sm);
   font-weight: 500;
-  transition: all var(--transition-base);
   cursor: default;
 }
 
+/* The old hover put #00d4ff text on an rgba(0,212,255,.15) fill -- cyan on
+   cyan, so the hover state actively reduced legibility. Brighten the text and
+   keep the fill neutral instead. */
 .skill:hover {
-  background: rgba(0, 212, 255, 0.15);
-  border-color: rgba(0, 212, 255, 0.4);
-  color: var(--color-accent-primary);
-  box-shadow: 0 0 20px rgba(0, 212, 255, 0.2), inset 0 0 10px rgba(0, 212, 255, 0.05);
+  background-color: rgba(0, 212, 255, 0.1);
+  border-color: rgba(125, 227, 255, 0.35);
+  color: var(--color-text-primary);
 }
 
 @media (max-width: 768px) {

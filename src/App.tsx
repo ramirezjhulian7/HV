@@ -1,6 +1,6 @@
 import './styles/index.css';
+import { MotionConfig } from 'framer-motion';
 import { Hero } from './components/Hero';
-import { Stats } from './components/Stats';
 import { Skills } from './components/Skills';
 import { Experience } from './components/Experience';
 import { Navbar } from './components/Navbar';
@@ -13,21 +13,24 @@ import { Footer } from './components/Footer';
 
 function App() {
   return (
-    <div className="app">
-      <ParticlesBackground />
-      <Navbar />
-      <LanguageSwitcher />
-      <ExportPDF />
-      <ScrollToTop />
-      <Hero />
-      <SectionDivider />
-      <Stats />
-      <SectionDivider />
-      <Skills />
-      <SectionDivider />
-      <Experience />
-      <Footer />
-    </div>
+    // The global CSS `prefers-reduced-motion` block cannot reach the inline
+    // transforms framer-motion writes from its rAF loop, so the setting has to
+    // be honoured by the library too.
+    <MotionConfig reducedMotion="user">
+      <div className="app">
+        <ParticlesBackground />
+        <Navbar />
+        <LanguageSwitcher />
+        <ExportPDF />
+        <ScrollToTop />
+        <Hero />
+        <SectionDivider />
+        <Skills />
+        <SectionDivider />
+        <Experience />
+        <Footer />
+      </div>
+    </MotionConfig>
   );
 }
 

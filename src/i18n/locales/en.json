@@ -1,22 +1,16 @@
 {
   "name": "Jhulian Ramírez",
-  "title": "Software Architect Developer",
+  "title": "Senior Software Architect · Cloud & AI",
   "nav": {
     "profile": "Profile",
     "skills": "Skills",
     "experience": "Experience"
   },
-  "stats": {
-    "years": "Years of Experience",
-    "technologies": "Technologies",
-    "projects": "Projects",
-    "companies": "Companies"
-  },
   "footer": {
     "madeWith": "Made with",
     "by": "by"
   },
-  "profile": "Software developer with extensive experience in Angular, .NET, and TypeScript. Specialized in creating dynamic, scalable, and responsive web applications. Passionate about research and application of generative artificial intelligence, integrating emerging technologies to enhance innovative and user-centric solutions. Possesses solid training in leadership, teamwork, and assertive communication. Distinguished by creativity, analytical thinking, and strategic approach to solving problems efficiently. Enjoys collaborating with multidisciplinary teams to achieve common goals and generate real impact through technology.",
+  "profile": "Senior Software Architect with over a decade of experience and more than five years defining the architecture of production platforms. Works with Domain-Driven Design, Clean Architecture, hexagonal architecture, and modular design (LIQUID) to keep large systems cheap to change. Defined the reference architecture for SmartFarm and led digital lending, document management, and LLM agent systems for EPM, XM, Comfamiliar Risaralda, and Medellín's city hall. Brings AI tooling into the development cycle —code generation, assisted review, and automated testing— where it shortens the cycle without eroding quality. Mentors and runs code reviews with BI, ML, AI, and Data Engineering teams. Cloud work primarily on Azure (deployment, Azure DevOps, Cosmos DB), with AWS foundations.",
   "exportPDF": "Export to PDF",
   "exporting": "Generating PDF...",
   "contact": {
@@ -46,16 +40,72 @@
     "emergingTech": "Emerging Tech"
   },
   "skills": {
-    "language": ["Spanish (Native)", "English (B2)"],
-    "languages": ["C#", "TypeScript", "JavaScript", "Python"],
-    "backend": [".NET", ".NET Core", "Node.JS", "NestJS"],
-    "frontend": ["Angular", "React", "HTML", "CSS", "Bootstrap"],
-    "databases": ["MongoDB", "SQL Server", "MySQL", "CosmoDB"],
-    "cloud": ["Azure", "AWS"],
-    "architecture": ["Microservices", "Hexagonal Architecture"],
-    "devops": ["Azure DevOps", "Kubernetes", "Rancher", "Git"],
-    "testing": ["Unit Testing", "Integration Testing", "Functional Testing"],
-    "emergingTech": ["AI/ML", "LangChain", "IoT", "Blockchain"]
+    "language": [
+      "Spanish (Native)",
+      "English (C2)"
+    ],
+    "languages": [
+      "C#",
+      "TypeScript",
+      "JavaScript",
+      "Python",
+      "SQL"
+    ],
+    "backend": [
+      ".NET",
+      ".NET Core",
+      "Node.js",
+      "NestJS",
+      "REST APIs"
+    ],
+    "frontend": [
+      "Angular",
+      "React",
+      "HTML",
+      "CSS",
+      "Bootstrap"
+    ],
+    "databases": [
+      "SQL Server",
+      "MongoDB",
+      "MySQL",
+      "Azure Cosmos DB"
+    ],
+    "cloud": [
+      "Azure",
+      "AWS"
+    ],
+    "architecture": [
+      "Domain-Driven Design (DDD)",
+      "Clean Architecture",
+      "Hexagonal Architecture",
+      "Microservices",
+      "Modular Design (LIQUID)",
+      "REST API Design",
+      "SOLID & Design Patterns"
+    ],
+    "devops": [
+      "Azure DevOps",
+      "CI/CD",
+      "Docker",
+      "Kubernetes",
+      "Rancher",
+      "Git"
+    ],
+    "testing": [
+      "Unit Testing",
+      "Integration Testing",
+      "Functional Testing",
+      "AI-Assisted Test Automation"
+    ],
+    "emergingTech": [
+      "Generative AI / LLMs",
+      "LangChain",
+      "AI Agents",
+      "OpenAI & Claude API",
+      "IoT",
+      "Blockchain"
+    ]
   },
   "experience": [
     {
@@ -63,15 +113,17 @@
       "position": "Senior Software Architect",
       "period": "06/2025 - Present",
       "project": "SmartFarm",
-      "description": "As a Senior Software Architect, I specialize in designing and implementing robust, scalable, and clean architectures that support high-quality software development. My role focuses on applying modern architectural paradigms such as Domain-Driven Design (DDD), Clean Architecture, and modular design patterns like SOLID, in order to foster maintainability and agility in projects.",
+      "description": "Accountable for the architecture of the SmartFarm platform: designing and implementing robust, scalable, and clean architectures that underpin high-quality software development. Applies modern architectural paradigms —Domain-Driven Design (DDD), Clean Architecture, and modular design patterns such as LIQUID— to maximize maintainability, product evolution, and team agility, defining technical standards, context boundaries, and cross-cutting development guidelines.",
       "highlights": [
-        "Actively integrate AI-powered tools into the development lifecycle, using them for code generation, intelligent peer reviews, automated testing, and refactoring assistance.",
-        "Provide mentorship and technical guidance to multidisciplinary teams. Lead code reviews and facilitate continuous improvement processes in Business Intelligence (BI), Machine Learning (ML), Artificial Intelligence (AI), and Data Engineering areas."
+        "Defines and governs the platform's reference architecture: domain separation and bounded contexts (DDD), API contracts, and LIQUID modularization strategies that enable each capability to evolve independently.",
+        "Integrates AI-powered tools across the entire development lifecycle —code generation, intelligent peer reviews, automated testing, and refactoring assistance— accelerating delivery while raising software consistency and quality.",
+        "Leads code reviews and continuous improvement processes, and provides mentorship and technical guidance to cross-functional Business Intelligence (BI), Machine Learning (ML), Artificial Intelligence (AI), and Data Engineering teams.",
+        "Aligns technology evolution with business value, translating strategic objectives into documented architecture decisions, explicit trade-offs, and technical standards adopted across teams."
       ]
     },
     {
       "company": "Ceiba Software",
-      "position": "Architect Developer",
+      "position": "Software Architect",
       "period": "03/2021 - 05/2025",
       "project": "Ciudadano 360° - Ruta N",
       "projectPeriod": "11/2024 - 05/2025",
@@ -86,7 +138,7 @@
     },
     {
       "company": "Ceiba Software",
-      "position": "Architect Developer",
+      "position": "Software Architect",
       "period": "03/2021 - 05/2025",
       "project": "XM RPM",
       "projectPeriod": "06/2023 - 11/2023",
@@ -100,7 +152,7 @@
     },
     {
       "company": "Ceiba Software",
-      "position": "Architect Developer",
+      "position": "Software Architect",
       "period": "03/2021 - 05/2025",
       "project": "Digital Credit Comfamiliar Risaralda",
       "projectPeriod": "08/2022 - 05/2023",
@@ -114,7 +166,7 @@
     },
     {
       "company": "Ceiba Software",
-      "position": "Architect Developer",
+      "position": "Software Architect",
       "period": "03/2021 - 05/2025",
       "project": "Two Speed Architecture - EPM",
       "projectPeriod": "04/2021 - 08/2022",

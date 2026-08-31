@@ -1,25 +1,37 @@
+/* ============================================================================
+   DESIGN TOKENS
+   ============================================================================ */
+
 :root {
   /* Color Palette - Deep Professional with Vibrant Accents */
   --color-bg-primary: #0a0e27;
   --color-bg-secondary: #141b3d;
   --color-bg-tertiary: #1e2749;
-  --color-bg-card: rgba(30, 39, 73, 0.6);
-  
+
   /* Accent Colors */
   --color-accent-primary: #00d4ff;
   --color-accent-secondary: #7c3aed;
   --color-accent-tertiary: #f59e0b;
-  
+
   /* Text Colors */
   --color-text-primary: #ffffff;
   --color-text-secondary: #cbd5e1;
-  --color-text-muted: #94a3b8;
-  
+  /* Raised from #94a3b8: once panels carry brightness(1.05) and a lighter fill,
+     the old muted grey loses contrast against the card it sits on. */
+  --color-text-muted: #a6b4c8;
+  /* Hierarchy below `muted` is a token, never `opacity` -- an opacity-dimmed
+     color has no verifiable contrast ratio. */
+  --color-text-dim: #8b99ad;
+
   /* Gradients */
   --gradient-primary: linear-gradient(135deg, #00d4ff 0%, #7c3aed 100%);
   --gradient-secondary: linear-gradient(135deg, #7c3aed 0%, #ec4899 100%);
   --gradient-accent: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%);
-  
+  /* --gradient-primary ends at #7c3aed, which is under 3:1 on these
+     backgrounds. Use --gradient-primary for FILLS (rails, markers, buttons)
+     and this lightened pair anywhere the gradient becomes TEXT. */
+  --gradient-text-primary: linear-gradient(135deg, #7de3ff 0%, #a78bfa 100%);
+
   /* Spacing */
   --spacing-xs: 0.5rem;
   --spacing-sm: 1rem;
@@ -27,23 +39,25 @@
   --spacing-lg: 2rem;
   --spacing-xl: 3rem;
   --spacing-2xl: 4rem;
-  
+
   /* Border Radius */
   --radius-sm: 0.5rem;
   --radius-md: 1rem;
   --radius-lg: 1.5rem;
   --radius-full: 9999px;
-  
+
   /* Shadows */
-  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.1);
-  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.2);
-  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.3);
-  --shadow-glow: 0 0 20px rgba(0, 212, 255, 0.3);
-  
+  --shadow-sm: 0 2px 8px rgba(2, 5, 18, 0.18);
+  --shadow-md: 0 4px 16px rgba(2, 5, 18, 0.28);
+  --shadow-lg: 0 8px 32px rgba(2, 5, 18, 0.4);
+  /* A symmetrical `0 0 Npx` halo reads as "radioactive". Directional accent
+     that obeys the light source instead. */
+  --shadow-glow: 0 0 0 1px rgba(0, 212, 255, 0.1), 4px 8px 24px -8px rgba(0, 212, 255, 0.2);
+
   /* Typography */
   --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   --font-display: 'Outfit', var(--font-primary);
-  
+
   --font-size-xs: 0.75rem;
   --font-size-sm: 0.875rem;
   --font-size-base: 1rem;
@@ -53,33 +67,113 @@
   --font-size-3xl: 2rem;
   --font-size-4xl: 2.5rem;
   --font-size-5xl: 3rem;
-  
+
   /* Transitions */
-  --transition-fast: 150ms ease-in-out;
-  --transition-base: 250ms ease-in-out;
-  --transition-slow: 400ms ease-in-out;
-  
-  /* Glass Effect - Multi-tier system */
-  --glass-bg: rgba(255, 255, 255, 0.06);
-  --glass-bg-subtle: rgba(255, 255, 255, 0.03);
-  --glass-bg-medium: rgba(255, 255, 255, 0.08);
-  --glass-bg-strong: rgba(255, 255, 255, 0.12);
-  --glass-border: rgba(255, 255, 255, 0.1);
-  --glass-border-light: rgba(255, 255, 255, 0.15);
-  --glass-border-accent: rgba(0, 212, 255, 0.15);
-  --glass-blur: blur(16px);
-  --glass-blur-heavy: blur(24px);
-  --glass-shine: linear-gradient(
-    135deg,
+  --transition-fast: 150ms cubic-bezier(0.33, 1, 0.68, 1);
+  --transition-base: 250ms cubic-bezier(0.33, 1, 0.68, 1);
+  --transition-slow: 400ms cubic-bezier(0.25, 1, 0.5, 1);
+
+  /* ==========================================================================
+     GLASS SYSTEM
+     ONE light source: top-left. Every sheen, rim and shadow offset obeys it.
+     THREE tiers: chrome (above the page) / card (within it) / inline (on a card).
+     ========================================================================== */
+
+  --light-angle: 145deg;
+  --light-origin-x: 12%;
+  --light-origin-y: 0%;
+
+  /* blur() alone averages the ambient into grey mud -- that is what makes
+     frosted panels look cheap. saturate() pulls the accent colour back through
+     the glass. Chrome sits ABOVE the page so it darkens what passes beneath
+     (brightness < 1); a card sits WITHIN the page so it lifts what is behind
+     it (brightness > 1). That one number is the whole tier distinction. */
+  --glass-filter-chrome: blur(28px) saturate(190%) brightness(0.88);
+  --glass-filter-card: blur(18px) saturate(165%) brightness(1.05);
+
+  /* Fills are cooled toward the ambient. Pure white alpha over navy
+     neutralises the scene toward grey -- glass vs. tracing paper. */
+  --glass-fill-chrome: rgba(9, 13, 33, 0.55);
+  --glass-fill-card: rgba(198, 218, 255, 0.055);
+  --glass-fill-raised: rgba(202, 222, 255, 0.085);
+  --glass-fill-inline: rgba(198, 218, 255, 0.045);
+
+  /* A hotspot at the light origin, dead by 65%. Radial rather than linear so
+     it lands correctly on square (Stats) and wide (Experience) cards alike --
+     a fixed-angle linear band reads as a printed stripe. */
+  --glass-sheen: radial-gradient(
+    120% 105% at var(--light-origin-x) var(--light-origin-y),
     rgba(255, 255, 255, 0.1) 0%,
-    rgba(255, 255, 255, 0.02) 40%,
-    rgba(255, 255, 255, 0) 60%
+    rgba(255, 255, 255, 0.035) 32%,
+    rgba(255, 255, 255, 0) 65%
   );
-  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.08);
-  --glass-shadow-hover: 0 12px 40px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+
+  /* The specular rim: real glass has a bright edge only where light strikes
+     it, never a flat 1px border on all four sides. */
+  --glass-edge: linear-gradient(
+    var(--light-angle),
+    rgba(255, 255, 255, 0.55) 0%,
+    rgba(255, 255, 255, 0.2) 16%,
+    rgba(255, 255, 255, 0.05) 38%,
+    rgba(255, 255, 255, 0) 58%,
+    rgba(120, 190, 255, 0.06) 100%
+  );
+  --glass-edge-hover: linear-gradient(
+    var(--light-angle),
+    rgba(190, 240, 255, 0.85) 0%,
+    rgba(255, 255, 255, 0.28) 16%,
+    rgba(255, 255, 255, 0.06) 40%,
+    rgba(255, 255, 255, 0) 60%,
+    rgba(0, 212, 255, 0.12) 100%
+  );
+  /* A linear rim smears when stretched around a radius; circles need an
+     angular sweep centred on the light direction. */
+  --glass-edge-conic: conic-gradient(
+    from 275deg,
+    rgba(255, 255, 255, 0) 0deg,
+    rgba(255, 255, 255, 0.55) 35deg,
+    rgba(255, 255, 255, 0.1) 110deg,
+    rgba(255, 255, 255, 0) 190deg,
+    rgba(255, 255, 255, 0) 360deg
+  );
+
+  /* Four jobs, four layers: inner light on top, inner SHADE below (thickness),
+     a tight contact shadow (it is resting on something) and a diffuse shadow
+     offset on +X to agree with the top-left light. Navy-black, never pure
+     black, so shadows stay in the scene's colour space. */
+  --glass-depth-card:
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    inset 0 -1px 0 rgba(2, 5, 18, 0.3),
+    1px 1px 2px rgba(2, 5, 18, 0.28),
+    3px 14px 30px -12px rgba(2, 5, 18, 0.5);
+  --glass-depth-card-hover:
+    inset 0 1px 0 rgba(255, 255, 255, 0.16),
+    inset 0 -1px 0 rgba(2, 5, 18, 0.34),
+    2px 3px 4px rgba(2, 5, 18, 0.3),
+    5px 22px 44px -14px rgba(2, 5, 18, 0.58);
+  --glass-depth-chrome:
+    inset 0 1px 0 rgba(255, 255, 255, 0.07),
+    inset 0 -1px 0 rgba(2, 5, 18, 0.45),
+    2px 10px 26px -14px rgba(2, 5, 18, 0.7);
+  --glass-depth-inline:
+    inset 0 1px 0 rgba(255, 255, 255, 0.07),
+    inset 0 -1px 0 rgba(2, 5, 18, 0.2),
+    1px 1px 2px rgba(2, 5, 18, 0.2);
+
+  /* Grain removes the plastic sheen from glass and, more importantly, breaks
+     up the banding the large low-alpha radial gradients produce on 8-bit
+     panels. */
+  --glass-noise: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+  --glass-noise-opacity: 0.038;
+
+  --glass-border: rgba(255, 255, 255, 0.06);
+  --glass-border-accent: rgba(125, 227, 255, 0.3);
 }
 
-/* Reset & Base Styles */
+/* ============================================================================
+   RESET & BASE
+   ============================================================================ */
+
 *,
 *::before,
 *::after {
@@ -99,18 +193,48 @@ body {
   line-height: 1.6;
   color: var(--color-text-primary);
   background: var(--color-bg-primary);
-  background-image:
-    radial-gradient(at 0% 0%, rgba(124, 58, 237, 0.2) 0px, transparent 50%),
-    radial-gradient(at 100% 100%, rgba(0, 212, 255, 0.18) 0px, transparent 50%),
-    radial-gradient(at 50% 50%, rgba(124, 58, 237, 0.06) 0px, transparent 70%);
-  background-attachment: fixed;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
 }
 
+/* The ambient wash lives on its own fixed layer rather than on
+   `background-attachment: fixed`, which forces the background into a layer of
+   its own and is a documented iOS Safari scroll-jank source when combined with
+   many backdrop-filtered elements. */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image:
+    radial-gradient(at 0% 0%, rgba(124, 58, 237, 0.2) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, rgba(0, 212, 255, 0.18) 0px, transparent 50%),
+    radial-gradient(at 50% 50%, rgba(124, 58, 237, 0.06) 0px, transparent 70%);
+}
+
+/* ONE page-level grain layer. Per-card grain pseudos look identical and cost a
+   fraction as much compositing. Deliberately unblended: a full-viewport
+   `mix-blend-mode` overlay forces the whole page into a composited blend. */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  background-image: var(--glass-noise);
+  background-size: 180px 180px;
+  opacity: 0.035;
+}
+
 /* Typography */
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: var(--font-display);
   line-height: 1.2;
   font-weight: 700;
@@ -130,10 +254,19 @@ a {
 }
 
 a:hover {
-  color: var(--color-accent-secondary);
+  color: #7de3ff;
 }
 
-/* Utility Classes */
+:focus-visible {
+  outline: 2px solid rgba(125, 227, 255, 0.9);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* ============================================================================
+   UTILITIES
+   ============================================================================ */
+
 .container {
   width: 100%;
   max-width: 1200px;
@@ -141,83 +274,194 @@ a:hover {
   padding: 0 var(--spacing-md);
 }
 
-.glass-card {
-  background: var(--glass-bg);
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--glass-shadow);
-  transition: all var(--transition-base);
-  position: relative;
-  overflow: hidden;
-}
-
-.glass-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: var(--glass-shine);
-  pointer-events: none;
-  border-radius: inherit;
-}
-
-.glass-card:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--glass-shadow-hover), var(--shadow-glow);
-  border-color: var(--glass-border-accent);
-}
-
 .gradient-text {
-  background: var(--gradient-primary);
+  background: var(--gradient-text-primary);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
-.btn {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--spacing-xs);
-  padding: var(--spacing-sm) var(--spacing-lg);
-  font-family: var(--font-display);
-  font-weight: 600;
-  font-size: var(--font-size-base);
-  border: none;
-  border-radius: var(--radius-full);
-  cursor: pointer;
-  transition: all var(--transition-base);
-  text-decoration: none;
-}
+/* ============================================================================
+   GLASS PRIMITIVES
+   Consumed from CSS Modules with `composes: glass ... from global;`.
+   ============================================================================ */
 
-.btn-primary {
-  background: var(--gradient-primary);
-  color: white;
-  box-shadow: var(--shadow-md);
-}
-
-.btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-lg), var(--shadow-glow);
-}
-
-.btn-secondary {
-  background: var(--glass-bg);
+.glass {
+  position: relative;
+  isolation: isolate;
+  border-radius: var(--radius-lg);
+  /* A barely-there base; the specular ::after rim does the real work. */
   border: 1px solid var(--glass-border);
-  color: var(--color-text-primary);
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
+  background-color: var(--glass-fill-card);
+  background-image: var(--glass-sheen);
+  box-shadow: var(--glass-depth-card);
+  backdrop-filter: var(--glass-filter-card);
+  -webkit-backdrop-filter: var(--glass-filter-card);
+
+  /* Never `transition: all` -- it animates backdrop-filter, forcing a full
+     backdrop re-capture and re-blur on every frame of every hover. */
+  /* `transform` is deliberately absent: framer-motion writes inline transforms
+     on these same elements, so a CSS transition on transform would both lose
+     to the inline style and re-interpolate on every rAF write. One owner per
+     property -- JS owns movement, CSS owns light. */
+  transition:
+    box-shadow var(--transition-base),
+    border-color var(--transition-base),
+    background-color var(--transition-base);
+
+  /* Deliberately no `overflow: hidden`: overflow + border-radius +
+     backdrop-filter makes the blur bleed square past the rounded corners in
+     Safari. The pseudo-elements clip themselves with `border-radius: inherit`. */
 }
 
-.btn-secondary:hover {
-  border-color: var(--color-accent-primary);
-  background: rgba(0, 212, 255, 0.1);
+/* The specular rim: a masked 1px ring, not a border. `padding` sets the
+   thickness and mask-composite carves out the middle. */
+.glass::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: inherit;
+  padding: 1px;
+  background: var(--glass-edge);
+  /* WebKit syntax FIRST: Safari < 15.4 only understands it, later Safari
+     honours the standard pair that follows. */
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+  transition: background var(--transition-base);
 }
 
-/* Animations */
+/* --- Tier 1: chrome. Sits above the page, so it subdues what passes under. */
+.glass--chrome {
+  background-color: var(--glass-fill-chrome);
+  background-image: none;
+  border-color: rgba(255, 255, 255, 0.05);
+  box-shadow: var(--glass-depth-chrome);
+  backdrop-filter: var(--glass-filter-chrome);
+  -webkit-backdrop-filter: var(--glass-filter-chrome);
+}
+
+/* Chrome edges fade out rather than terminating as a flat full-width line. */
+.glass--edge-bottom::after {
+  padding: 0 0 1px 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.14) 22%,
+    rgba(255, 255, 255, 0.05) 70%,
+    transparent 100%
+  );
+  -webkit-mask: none;
+  mask: none;
+}
+
+.glass--edge-top::after {
+  padding: 1px 0 0 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.12) 28%,
+    rgba(255, 255, 255, 0.04) 74%,
+    transparent 100%
+  );
+  -webkit-mask: none;
+  mask: none;
+}
+
+/* --- Tier 2: cards. `.glass` is the wide-panel default. Equal alpha over a
+   bigger area reads heavier, so small panels take MORE fill, not the same. */
+.glass--raised {
+  background-color: var(--glass-fill-raised);
+}
+
+/* --- Tier 3: inline pills, chips and badges.
+   No backdrop-filter: a pill sitting on a glass card has nothing left to blur
+   (its backdrop is the card's already-blurred output), so it costs full GPU
+   price for zero visual gain. With ~10 categories x ~8 pills that alone was
+   ~80 pointless composited layers. */
+.glass--inline {
+  position: relative;
+  isolation: isolate;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--glass-border);
+  background-color: var(--glass-fill-inline);
+  background-image: none;
+  box-shadow: var(--glass-depth-inline);
+  transition:
+    box-shadow var(--transition-base),
+    border-color var(--transition-base),
+    background-color var(--transition-base),
+    color var(--transition-base);
+}
+
+.glass--inline::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(
+    var(--light-angle),
+    rgba(255, 255, 255, 0.3) 0%,
+    rgba(255, 255, 255, 0.06) 40%,
+    rgba(255, 255, 255, 0) 70%
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+.glass--circle {
+  border-radius: 50%;
+}
+
+.glass--circle::after {
+  background: var(--glass-edge-conic);
+}
+
+/* Concave wells (icon chips) are lit from the OPPOSITE side: shadow top-left,
+   highlight bottom-right. That inversion is what makes them read as recessed. */
+.glass--well {
+  border: 1px solid rgba(0, 212, 255, 0.1);
+  border-top-color: rgba(0, 0, 0, 0.2);
+  border-left-color: rgba(0, 0, 0, 0.14);
+  background: rgba(0, 212, 255, 0.09);
+  box-shadow:
+    inset 1px 2px 4px rgba(2, 5, 18, 0.38),
+    inset -1px -1px 0 rgba(255, 255, 255, 0.06);
+}
+
+/* Hover changes the LIGHT on a surface, never its material: the rim brightens,
+   the contact shadow separates, the diffuse shadow spreads. No accent halos.
+   The lift itself is written by framer-motion (see above). */
+.glass--interactive:hover,
+.glass--interactive:focus-visible {
+  box-shadow: var(--glass-depth-card-hover);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.glass--interactive:hover::after,
+.glass--interactive:focus-visible::after {
+  background: var(--glass-edge-hover);
+}
+
+/* ============================================================================
+   ANIMATIONS
+   ============================================================================ */
+
 @keyframes fadeInUp {
   from {
     opacity: 0;
@@ -250,8 +494,8 @@ a:hover {
 }
 
 @keyframes glassGlow {
-  0%, 100% { opacity: 0.3; }
-  50% { opacity: 0.6; }
+  0%, 100% { opacity: 0.28; }
+  50% { opacity: 0.45; }
 }
 
 @keyframes ambientDrift {
@@ -261,7 +505,10 @@ a:hover {
   75% { transform: translate(15px, 25px) scale(1.02); }
 }
 
-/* Scrollbar Styling */
+/* ============================================================================
+   SCROLLBAR
+   ============================================================================ */
+
 ::-webkit-scrollbar {
   width: 8px;
 }
@@ -282,16 +529,87 @@ a:hover {
   background-clip: padding-box;
 }
 
-/* Reduced motion */
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
+/* ============================================================================
+   DEGRADATION -- a CV is a legibility document first.
+   ============================================================================ */
+
+/* Safari ignores backdrop-filter on an element with no background-color, and
+   browsers without it at all would render these panels as bare tint. */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .glass { background-color: rgba(21, 28, 62, 0.92); }
+  .glass--chrome { background-color: rgba(8, 12, 30, 0.96); }
+  .glass--inline { background-color: rgba(26, 34, 70, 0.9); }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .glass,
+  .glass--inline {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background-color: rgba(21, 28, 62, 0.96);
+  }
+
+  .glass--chrome {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background-color: rgba(8, 12, 30, 0.98);
+  }
+
+  body::after { display: none; }
+}
+
+/* `background-clip: text` + transparent fill renders headings, the logo and
+   every stat number INVISIBLE in Windows High Contrast. */
+@media (forced-colors: active) {
+  .gradient-text {
+    background: none;
+    -webkit-text-fill-color: currentColor;
+  }
+
+  .glass::after,
+  .glass--inline::after {
+    display: none;
   }
 }
 
-/* Responsive */
+@media print {
+  body::before,
+  body::after {
+    display: none;
+  }
+
+  .glass,
+  .glass--chrome,
+  .glass--inline {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background: #fff;
+    color: #0f172a;
+    box-shadow: none;
+    border: 1px solid #e2e8f0;
+  }
+
+  .glass::after,
+  .glass--inline::after {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ============================================================================
+   RESPONSIVE
+   ============================================================================ */
+
 @media (max-width: 768px) {
   :root {
     --font-size-5xl: 2.25rem;
@@ -301,25 +619,20 @@ a:hover {
     --spacing-sm: 1.25rem;
     --spacing-md: 1.75rem;
     --spacing-lg: 2.25rem;
+
+    /* Blur cost scales with radius x layer AREA, so cap both on small screens. */
+    --glass-filter-card: blur(12px) saturate(150%) brightness(1.04);
+    --glass-filter-chrome: blur(18px) saturate(160%) brightness(0.9);
   }
-  
+
   body {
     font-size: var(--font-size-lg);
     line-height: 1.7;
   }
-  
+
+  /* The mobile scale bumps --spacing-md UP to 1.75rem for touch targets, which
+     is the wrong value for a horizontal page gutter on a 390px screen. */
   .container {
-    padding: 0 var(--spacing-md);
-  }
-  
-  /* Better touch targets */
-  .btn {
-    min-height: 48px;
-    padding: var(--spacing-md) var(--spacing-lg);
-    font-size: var(--font-size-base);
-  }
-  
-  .glass-card {
-    padding: var(--spacing-md);
+    padding: 0 1rem;
   }
 }

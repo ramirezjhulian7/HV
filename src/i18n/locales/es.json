@@ -1,22 +1,16 @@
 {
   "name": "Jhulian Ramírez",
-  "title": "Arquitecto Desarrollador",
+  "title": "Arquitecto Senior de Software · Cloud & IA",
   "nav": {
     "profile": "Perfil",
     "skills": "Habilidades",
     "experience": "Experiencia"
   },
-  "stats": {
-    "years": "Años de Experiencia",
-    "technologies": "Tecnologías",
-    "projects": "Proyectos",
-    "companies": "Empresas"
-  },
   "footer": {
     "madeWith": "Hecho con",
     "by": "por"
   },
-  "profile": "Desarrollador de software con amplia experiencia en Angular, .NET y TypeScript. Especializado en la creación de aplicaciones web dinámicas, escalables y responsivas. Apasionado por la investigación y aplicación de inteligencias artificiales generativas, integrando tecnologías emergentes para potenciar soluciones innovadoras y centradas en el usuario. Cuenta con una sólida formación en liderazgo, trabajo en equipo y comunicación asertiva. Destacado por su creatividad, pensamiento analítico y enfoque estratégico para resolver problemas de forma eficiente. Disfruta colaborar con equipos multidisciplinarios para alcanzar objetivos comunes y generar impacto real a través de la tecnología.",
+  "profile": "Arquitecto Senior de Software con más de una década de experiencia y más de cinco años definiendo la arquitectura de plataformas en producción. Trabaja con Domain-Driven Design, Clean Architecture, arquitectura hexagonal y diseño modular (LIQUID) para que los sistemas grandes sigan siendo baratos de cambiar. Definió la arquitectura de referencia de SmartFarm y lideró plataformas de crédito digital, gestión documental y agentes LLM para EPM, XM, Comfamiliar Risaralda y la Alcaldía de Medellín. Incorpora herramientas de IA en el ciclo de desarrollo —generación de código, revisión asistida y pruebas automatizadas— donde acortan el ciclo sin degradar la calidad. Acompaña con mentoría y revisiones de código a equipos de BI, ML, IA e Ingeniería de Datos. Cloud principalmente en Azure (despliegue, Azure DevOps, Cosmos DB), con fundamentos de AWS.",
   "exportPDF": "Exportar a PDF",
   "exporting": "Generando PDF...",
   "contact": {
@@ -46,16 +40,72 @@
     "emergingTech": "Tecnologías Emergentes"
   },
   "skills": {
-    "language": ["Español (Nativo)", "Inglés (B2)"],
-    "languages": ["C#", "TypeScript", "JavaScript", "Python"],
-    "backend": [".NET", ".NET Core", "Node.JS", "NestJS"],
-    "frontend": ["Angular", "React", "HTML", "CSS", "Bootstrap"],
-    "databases": ["MongoDB", "SQL Server", "MySQL", "CosmoDB"],
-    "cloud": ["Azure","AWS"],
-    "architecture": ["Microservicios", "Arquitectura Hexagonal"],
-    "devops": ["Azure DevOps", "Kubernetes", "Rancher", "Git"],
-    "testing": ["Pruebas Unitarias", "Pruebas de Integración", "Pruebas Funcionales"],
-    "emergingTech": ["IA/ML", "LangChain", "IoT", "Blockchain"]
+    "language": [
+      "Español (Nativo)",
+      "Inglés (C2)"
+    ],
+    "languages": [
+      "C#",
+      "TypeScript",
+      "JavaScript",
+      "Python",
+      "SQL"
+    ],
+    "backend": [
+      ".NET",
+      ".NET Core",
+      "Node.js",
+      "NestJS",
+      "APIs REST"
+    ],
+    "frontend": [
+      "Angular",
+      "React",
+      "HTML",
+      "CSS",
+      "Bootstrap"
+    ],
+    "databases": [
+      "SQL Server",
+      "MongoDB",
+      "MySQL",
+      "Azure Cosmos DB"
+    ],
+    "cloud": [
+      "Azure",
+      "AWS"
+    ],
+    "architecture": [
+      "Domain-Driven Design (DDD)",
+      "Clean Architecture",
+      "Arquitectura Hexagonal",
+      "Microservicios",
+      "Diseño Modular (LIQUID)",
+      "Diseño de APIs REST",
+      "SOLID y Patrones de Diseño"
+    ],
+    "devops": [
+      "Azure DevOps",
+      "CI/CD",
+      "Docker",
+      "Kubernetes",
+      "Rancher",
+      "Git"
+    ],
+    "testing": [
+      "Pruebas Unitarias",
+      "Pruebas de Integración",
+      "Pruebas Funcionales",
+      "Testing Automatizado con IA"
+    ],
+    "emergingTech": [
+      "IA Generativa / LLMs",
+      "LangChain",
+      "Agentes de IA",
+      "OpenAI y Claude API",
+      "IoT",
+      "Blockchain"
+    ]
   },
   "experience": [
     {
@@ -63,15 +113,17 @@
       "position": "Arquitecto Senior de Software",
       "period": "06/2025 - Presente",
       "project": "SmartFarm",
-      "description": "Como Arquitecto Senior de Software, me especializo en diseñar e implementar arquitecturas robustas, escalables y limpias que respaldan el desarrollo de software de alta calidad. Mi rol se enfoca en aplicar paradigmas arquitectónicos modernos como el Diseño Guiado por el Dominio (DDD), Arquitectura Limpia y patrones de diseño modular como LIQUID, con el fin de fomentar la mantenibilidad y agilidad en los proyectos.",
+      "description": "Responsable de la arquitectura de la plataforma SmartFarm: diseño e implementación de arquitecturas robustas, escalables y limpias que sustentan el desarrollo de software de alta calidad. Aplica paradigmas arquitectónicos modernos —Domain-Driven Design (DDD), Clean Architecture y patrones de diseño modular como LIQUID— para maximizar la mantenibilidad, la evolución del producto y la agilidad de los equipos, definiendo estándares técnicos, límites de contexto y guías transversales de desarrollo.",
       "highlights": [
-        "Integro activamente herramientas impulsadas por inteligencia artificial en el ciclo de vida del desarrollo, utilizándolas para la generación de código, revisiones inteligentes entre pares, pruebas automatizadas y asistencia en refactorización.",
-        "Brindo mentoría y acompañamiento técnico a equipos multidisciplinarios. Lidero revisiones de código y facilito procesos de mejora continua en áreas de Inteligencia de Negocios (BI), Aprendizaje Automático (ML), Inteligencia Artificial (AI) e Ingeniería de Datos."
+        "Define y gobierna la arquitectura de referencia de la plataforma: separación por dominios y límites de contexto (DDD), contratos de API y estrategias de modularización con LIQUID que habilitan la evolución independiente de cada capacidad.",
+        "Integra herramientas impulsadas por inteligencia artificial en todo el ciclo de vida del desarrollo —generación de código, revisiones inteligentes entre pares, pruebas automatizadas y asistencia en refactorización—, acelerando la entrega y elevando la consistencia y la calidad del software.",
+        "Lidera revisiones de código y procesos de mejora continua, y brinda mentoría y acompañamiento técnico a equipos multidisciplinarios de Inteligencia de Negocios (BI), Aprendizaje Automático (ML), Inteligencia Artificial (IA) e Ingeniería de Datos.",
+        "Alinea la evolución tecnológica con el valor de negocio, traduciendo objetivos estratégicos en decisiones de arquitectura documentadas, trade-offs explícitos y estándares técnicos adoptados por los equipos."
       ]
     },
     {
       "company": "Ceiba Software",
-      "position": "Arquitecto Desarrollador",
+      "position": "Arquitecto de Software",
       "period": "03/2021 - 05/2025",
       "project": "Ciudadano 360° - Ruta N",
       "projectPeriod": "11/2024 - 05/2025",
@@ -86,7 +138,7 @@
     },
     {
       "company": "Ceiba Software",
-      "position": "Arquitecto Desarrollador",
+      "position": "Arquitecto de Software",
       "period": "03/2021 - 05/2025",
       "project": "XM RPM",
       "projectPeriod": "06/2023 - 11/2023",
@@ -100,7 +152,7 @@
     },
     {
       "company": "Ceiba Software",
-      "position": "Arquitecto Desarrollador",
+      "position": "Arquitecto de Software",
       "period": "03/2021 - 05/2025",
       "project": "Digital Credit Comfamiliar Risaralda",
       "projectPeriod": "08/2022 - 05/2023",
@@ -114,7 +166,7 @@
     },
     {
       "company": "Ceiba Software",
-      "position": "Arquitecto Desarrollador",
+      "position": "Arquitecto de Software",
       "period": "03/2021 - 05/2025",
       "project": "Two Speed Architecture - EPM",
       "projectPeriod": "04/2021 - 08/2022",

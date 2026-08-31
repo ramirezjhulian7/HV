@@ -42,7 +42,6 @@ export const ExportPDF = () => {
 
       let mainY = 18;
       let sidebarY = 0;
-      let currentPage = 1;
 
       const drawSidebar = () => {
         doc.setFillColor(COLORS.sidebar);
@@ -58,7 +57,6 @@ export const ExportPDF = () => {
 
       const addNewPage = () => {
         doc.addPage();
-        currentPage++;
         drawSidebar();
         drawAccentBar();
         mainY = 15;
@@ -206,29 +204,52 @@ export const ExportPDF = () => {
       const skills = t('skills', { returnObjects: true }) as Skills;
       const skillKeys = Object.keys(skills) as (keyof Skills)[];
 
+      // A category is only drawn if its heading AND at least a few of its items
+      // fit; whatever does not fit is queued and continued on a later page's
+      // sidebar rather than being silently dropped.
+      type PendingCategory = { title: string; items: string[] };
+      const pendingCategories: PendingCategory[] = [];
+
+      const skillLines = (skill: string): string[] =>
+        doc.splitTextToSize(skill, sidebarContentWidth - 3) as string[];
+
+      const drawSkillItem = (skill: string, y: number): number => {
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(7);
+        doc.setTextColor(COLORS.whiteMuted);
+        const lines = skillLines(skill);
+        doc.setFillColor(COLORS.accent);
+        doc.circle(sidebarPadding + 0.8, y - 0.8, 0.6, 'F');
+        doc.text(lines, sidebarPadding + 3, y);
+        return y + lines.length * 3.2;
+      };
+
+      const skillBottom = pageHeight - 12;
+
       for (const key of skillKeys) {
         const categorySkills = skills[key];
         if (!Array.isArray(categorySkills)) continue;
 
-        if (sidebarY > pageHeight - 20) {
-          // Skills overflow: continue on next page sidebar
-          break;
+        const title = t(`sections.${key}`);
+
+        // Need room for the heading plus at least two entries to be worth starting.
+        if (sidebarY + 4 + 3.2 * 2 > skillBottom) {
+          pendingCategories.push({ title, items: [...categorySkills] });
+          continue;
         }
 
-        sidebarY = drawSidebarSection(t(`sections.${key}`), sidebarY);
+        sidebarY = drawSidebarSection(title, sidebarY);
 
+        const remaining: string[] = [];
         for (const skill of categorySkills) {
-          if (sidebarY > pageHeight - 8) break;
-          doc.setFont('helvetica', 'normal');
-          doc.setFontSize(7);
-          doc.setTextColor(COLORS.whiteMuted);
-          doc.text(skill, sidebarPadding + 3, sidebarY);
-
-          // Small dot
-          doc.setFillColor(COLORS.accent);
-          doc.circle(sidebarPadding + 0.8, sidebarY - 0.8, 0.6, 'F');
-          sidebarY += 3.2;
+          const needed = skillLines(skill).length * 3.2;
+          if (sidebarY + needed > skillBottom) {
+            remaining.push(skill);
+            continue;
+          }
+          sidebarY = drawSkillItem(skill, sidebarY);
         }
+        if (remaining.length) pendingCategories.push({ title, items: remaining });
         sidebarY += 2;
       }
 
@@ -311,6 +332,52 @@ export const ExportPDF = () => {
           doc.setLineWidth(0.15);
           doc.line(mainLeft, mainY - 2, mainLeft + mainWidth, mainY - 2);
           mainY += 2;
+        }
+      }
+
+      // Anything the page-1 sidebar could not hold continues on the following
+      // pages' sidebars, so no skill category is ever silently dropped.
+      if (pendingCategories.length) {
+        let page = 1;
+        let flushY = pageHeight;
+
+        for (const category of pendingCategories) {
+          let items = category.items;
+          let headingDrawn = false;
+
+          while (items.length) {
+            if (flushY + 4 + 3.2 > pageHeight - 12) {
+              page++;
+              if (page > doc.getNumberOfPages()) {
+                doc.addPage();
+                drawSidebar();
+                drawAccentBar();
+              }
+              doc.setPage(page);
+              flushY = 15;
+              headingDrawn = false;
+            }
+
+            if (!headingDrawn) {
+              flushY = drawSidebarSection(category.title, flushY);
+              headingDrawn = true;
+            }
+
+            const next: string[] = [];
+            for (const skill of items) {
+              const needed = skillLines(skill).length * 3.2;
+              if (flushY + needed > pageHeight - 12) {
+                next.push(skill);
+                continue;
+              }
+              flushY = drawSkillItem(skill, flushY);
+            }
+            // A fresh page that still places nothing would loop forever;
+            // bail rather than hang the download.
+            if (next.length === items.length) break;
+            items = next;
+          }
+          flushY += 2;
         }
       }
 

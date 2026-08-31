@@ -14,7 +14,7 @@
   background: linear-gradient(
     90deg,
     transparent 0%,
-    rgba(0, 212, 255, 0.3) 50%,
+    rgba(125, 227, 255, 0.32) 50%,
     transparent 100%
   );
 }
@@ -25,6 +25,5 @@
   background: var(--gradient-primary);
   transform: rotate(45deg);
   border-radius: 2px;
-  box-shadow: 0 0 12px rgba(0, 212, 255, 0.4);
   flex-shrink: 0;
 }

@@ -7,13 +7,14 @@
   padding: var(--spacing-sm) 0;
 }
 
+/* The chrome surface is a sibling layer, not the animated element itself: an
+   ancestor whose opacity is animated becomes a backdrop root and would make
+   the blur under it sample nothing. */
 .glass {
+  composes: glass--chrome glass--edge-bottom from global;
   position: absolute;
   inset: 0;
-  background: rgba(10, 14, 39, 0.75);
-  backdrop-filter: var(--glass-blur-heavy);
-  -webkit-backdrop-filter: var(--glass-blur-heavy);
-  border-bottom: 1px solid var(--glass-border);
+  border-radius: 0;
   pointer-events: none;
 }
 
@@ -31,7 +32,7 @@
   font-family: var(--font-display);
   font-size: var(--font-size-xl);
   font-weight: 800;
-  background: var(--gradient-primary);
+  background: var(--gradient-text-primary);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -56,14 +57,24 @@
   font-weight: 500;
   color: var(--color-text-secondary);
   text-decoration: none;
-  transition: all var(--transition-base);
   border: 1px solid transparent;
+  transition:
+    color var(--transition-base),
+    background-color var(--transition-base),
+    border-color var(--transition-base);
 }
 
 .link:hover {
-  color: var(--color-accent-primary);
-  background: rgba(0, 212, 255, 0.08);
-  border-color: rgba(0, 212, 255, 0.15);
+  color: #7de3ff;
+  background-color: rgba(0, 212, 255, 0.08);
+  border-color: rgba(125, 227, 255, 0.22);
+}
+
+@media (forced-colors: active) {
+  .logo {
+    background: none;
+    -webkit-text-fill-color: currentColor;
+  }
 }
 
 @media (max-width: 768px) {

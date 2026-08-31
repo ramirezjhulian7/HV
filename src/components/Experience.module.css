@@ -12,33 +12,53 @@
 }
 
 .timeline {
+  /* One source of truth for the rail. `--rail-x` is the rail's centre measured
+     from the timeline's left edge; `--rail-gap` is the space between the rail
+     and the cards. Both the rail and the markers derive from these, so the
+     dots cannot drift off the line. */
+  --rail-x: 5px;
+  --rail-gap: 28px;
   position: relative;
   display: flex;
   flex-direction: column;
   gap: var(--spacing-xl);
-  padding-left: var(--spacing-lg);
+  padding-left: calc(var(--rail-x) + var(--rail-gap));
 }
 
+/* The rail is a dim track; the bright fill is a separate layer scaled by
+   scroll progress, so the line reads as a live position indicator through the
+   career rather than as decoration. `transform-origin: top` + scaleY keeps it
+   a compositor-only property -- never animate height. */
 .timeline::before {
   content: '';
   position: absolute;
-  left: 0;
+  left: calc(var(--rail-x) - 1px);
   top: 0;
   bottom: 0;
   width: 2px;
+  background: rgba(148, 163, 184, 0.16);
+}
+
+.railFill {
+  position: absolute;
+  left: calc(var(--rail-x) - 1px);
+  top: 0;
+  width: 2px;
+  height: 100%;
+  transform-origin: top center;
   background: var(--gradient-primary);
-  box-shadow: var(--shadow-glow);
+  will-change: transform;
 }
 
 .item {
   position: relative;
-  padding-left: var(--spacing-xl);
 }
 
 .marker {
   position: absolute;
-  left: -10px;
-  top: 0;
+  /* Centre lands exactly on the rail: -gap - half the marker, then +half back. */
+  left: calc(-1 * var(--rail-gap) - 10px);
+  top: 10px;
   width: 20px;
   height: 20px;
   display: flex;
@@ -54,48 +74,23 @@
   border: 2px solid var(--color-bg-primary);
   position: relative;
   z-index: 2;
-  box-shadow: 0 0 8px rgba(0, 212, 255, 0.4);
 }
 
+/* A radial gradient rather than a `filter: blur()` circle: identical result,
+   but `filter` establishes a backdrop root for its subtree and forced a large
+   blurred layer to repaint forever on an infinite keyframe. */
 .markerGlow {
   position: absolute;
-  width: 24px;
-  height: 24px;
-  background: var(--color-accent-primary);
+  width: 26px;
+  height: 26px;
   border-radius: 50%;
-  opacity: 0.3;
-  filter: blur(10px);
-  animation: glassGlow 3s ease-in-out infinite;
+  background: radial-gradient(circle, rgba(0, 212, 255, 0.55) 0%, rgba(0, 212, 255, 0) 70%);
+  opacity: 0;
 }
 
 .card {
-  background: var(--glass-bg-medium);
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius-lg);
+  composes: glass glass--interactive from global;
   padding: var(--spacing-lg);
-  box-shadow: var(--glass-shadow);
-  transition: all var(--transition-base);
-  position: relative;
-  overflow: hidden;
-}
-
-.card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: var(--glass-shine);
-  pointer-events: none;
-  border-radius: inherit;
-}
-
-.card:hover {
-  border-color: var(--glass-border-accent);
-  box-shadow: var(--glass-shadow-hover), 0 0 30px rgba(0, 212, 255, 0.1);
 }
 
 .cardHeader {
@@ -129,7 +124,7 @@
 .position {
   font-size: var(--font-size-base);
   font-weight: 600;
-  color: var(--color-accent-primary);
+  color: #7de3ff;
   margin: 0 0 var(--spacing-xs) 0;
 }
 
@@ -137,38 +132,20 @@
   font-size: var(--font-size-sm);
   color: var(--color-text-muted);
   margin: 0;
+  font-variant-numeric: tabular-nums;
 }
 
 .projectBadge {
+  composes: glass--inline from global;
   display: flex;
   flex-direction: column;
   align-items: flex-end;
   gap: var(--spacing-xs);
   padding: var(--spacing-sm) var(--spacing-md);
-  background: rgba(124, 58, 237, 0.12);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border: 1px solid rgba(124, 58, 237, 0.25);
   border-radius: var(--radius-md);
+  background-color: rgba(124, 58, 237, 0.16);
+  border-color: rgba(167, 139, 250, 0.28);
   flex-shrink: 0;
-  position: relative;
-  overflow: hidden;
-}
-
-.projectBadge::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(
-    135deg,
-    rgba(124, 58, 237, 0.08) 0%,
-    rgba(124, 58, 237, 0) 60%
-  );
-  pointer-events: none;
-  border-radius: inherit;
 }
 
 .projectName {
@@ -178,9 +155,12 @@
   text-align: right;
 }
 
+/* Dates on a violet tint were the weakest contrast pair on the page; the
+   secondary token restores it without changing the hierarchy. */
 .projectPeriod {
   font-size: var(--font-size-xs);
-  color: var(--color-text-muted);
+  color: var(--color-text-secondary);
+  font-variant-numeric: tabular-nums;
 }
 
 .description {
@@ -212,7 +192,6 @@
   font-weight: bold;
   flex-shrink: 0;
   font-size: var(--font-size-lg);
-  text-shadow: 0 0 8px rgba(0, 212, 255, 0.4);
 }
 
 @media (max-width: 768px) {
@@ -221,16 +200,28 @@
   }
 
   .timeline {
-    padding-left: var(--spacing-md);
+    /* 112px of the 390px viewport used to go to nested indentation, leaving a
+       220px text column. Tightening the rail gutter and the card padding gives
+       the copy back about 40% more width. */
+    --rail-gap: 16px;
+    padding-left: calc(var(--rail-x) + var(--rail-gap));
     gap: var(--spacing-lg);
   }
 
-  .item {
-    padding-left: var(--spacing-md);
+  .card {
+    padding: 1rem;
   }
 
-  .card {
-    padding: var(--spacing-md);
+  .highlight {
+    gap: 0.625rem;
+  }
+
+  .highlights {
+    gap: 0.875rem;
+  }
+
+  .projectBadge {
+    padding: 0.625rem 0.875rem;
   }
 
   .cardHeader {
