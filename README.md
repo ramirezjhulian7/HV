@@ -1,80 +1,69 @@
-# Interactive Resume - Jhulian Ramírez
+# Interactive Resume — Jhulian Ramírez
 
-Una hoja de vida interactiva, multiidioma (Español/Inglés) y estilizada, desarrollada con React, TypeScript y diseño premium.
+Hoja de vida interactiva y bilingüe (Español/Inglés), con exportación a PDF.
+En producción: **https://jhulian-resume.web.app**
 
 ## ✨ Características
 
-- 🌐 **Multiidioma**: Soporte completo para Español e Inglés
-- 🎨 **Diseño Premium**: Glassmorphism, gradientes vibrantes y animaciones fluidas
-- 📱 **Responsive**: Optimizado para móvil, tablet y desktop
-- ⚡ **Alto Rendimiento**: Build con Vite y React 18
-- 🚀 **Animaciones**: Framer Motion para experiencia dinámica
-- 🔥 **Firebase Ready**: Listo para desplegar en Firebase Hosting
+- 🌐 **Bilingüe ES/EN** — todo el contenido vive en los archivos de traducción; el
+  cambio de idioma es instantáneo y no recarga la página.
+- 📄 **Exportación a PDF** — genera el CV con primitivas vectoriales de jsPDF, no
+  con una captura de pantalla, así que el texto queda seleccionable y el archivo
+  es liviano.
+- 🎨 **Sistema de glassmorphism** — una sola fuente de luz y tres niveles de
+  superficie (chrome / card / inline). Ver [DEPLOYMENT.md](DEPLOYMENT.md#design-system-notes).
+- 🚀 **Animaciones con propósito** — entradas escalonadas con tope de duración y
+  un riel de línea de tiempo guiado por el scroll.
+- ♿ **Accesibilidad** — respeta `prefers-reduced-motion`,
+  `prefers-reduced-transparency` y `forced-colors`, con degradación para
+  navegadores sin `backdrop-filter`.
+- 📱 **Responsive** — probado a 390px de ancho.
 
-## 🛠️ Stack Tecnológico
+## 🛠️ Stack
 
-- **Framework**: React 18 + TypeScript
-- **Build Tool**: Vite
-- **Styling**: CSS Modules con CSS Variables
-- **Animations**: Framer Motion
-- **i18n**: react-i18next
-- **Hosting**: Firebase Hosting
+| | |
+|---|---|
+| Framework | React 19 + TypeScript |
+| Build | Vite 7 |
+| Estilos | CSS Modules + CSS Custom Properties |
+| Animación | Framer Motion 12 |
+| Fondo | tsParticles |
+| i18n | react-i18next |
+| PDF | jsPDF |
+| Hosting | Firebase Hosting |
+
+**Requiere Node `^20.19.0 || >=22.12.0`** (lo exige Vite 7).
 
 ## 📦 Instalación
 
 ```bash
-# Instalar dependencias
-npm install
-
-# Ejecutar en desarrollo
-npm run dev
-
-# Build para producción
-npm run build
-
-# Preview del build
-npm run preview
+npm install      # instalar dependencias
+npm run dev      # desarrollo
+npm run build    # tsc -b && vite build
+npm run preview  # servir el build
+npm run lint     # eslint
 ```
 
-## 🔥 Deploy a Firebase Hosting
+## 🔥 Deploy
 
-### Método 1: Despliegue Manual
+`firebase-tools` ya está como devDependency, así que no hace falta instalarlo
+globalmente:
 
-1. **Instalar Firebase CLI globalmente** (si no lo tienes):
 ```bash
-npm install -g firebase-tools
+npx firebase login          # solo la primera vez
+rm -rf dist && npm run build
+npx firebase deploy --only hosting
 ```
 
-2. **Login a Firebase**:
-```bash
-firebase login
-```
+El proyecto (`jhulian-resume`) y el hosting ya están configurados en
+[.firebaserc](.firebaserc) y [firebase.json](firebase.json) — **no** hace falta
+`firebase init`.
 
-3. **Inicializar Firebase** (solo la primera vez):
-```bash
-firebase init hosting
-```
-   - Selecciona un proyecto existente o crea uno nuevo
-   - Usa `dist` como directorio público
-   - Configura como single-page app: **Yes**
-   - No sobrescribir index.html: **No**
+Los detalles del despliegue, cómo verificarlo y las trampas conocidas están en
+**[DEPLOYMENT.md](DEPLOYMENT.md)**.
 
-4. **Build y Deploy**:
-```bash
-npm run build
-firebase deploy
-```
-
-### Método 2: Deploy con un solo comando
-
-Una vez configurado, puedes usar:
-```bash
-npm run build && firebase deploy
-```
-
-### Método 3: GitHub Actions (CI/CD)
-
-Puedes configurar GitHub Actions para deploy automático:
+<details>
+<summary>Ejemplo de CI con GitHub Actions</summary>
 
 ```yaml
 # .github/workflows/deploy.yml
@@ -82,17 +71,17 @@ name: Deploy to Firebase Hosting
 
 on:
   push:
-    branches:
-      - main
+    branches: [master]
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '22'   # Vite 7 no corre en Node 18
+          cache: npm
       - run: npm ci
       - run: npm run build
       - uses: FirebaseExtended/action-hosting-deploy@v0
@@ -100,81 +89,78 @@ jobs:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT }}'
           channelId: live
-          projectId: your-project-id
+          projectId: jhulian-resume
 ```
 
-## 📁 Estructura del Proyecto
+</details>
+
+## 📁 Estructura
 
 ```
-HV/
-├── src/
-│   ├── assets/          # Imágenes y recursos
-│   ├── components/      # Componentes React
-│   │   ├── Hero.tsx
-│   │   ├── Skills.tsx
-│   │   ├── Experience.tsx
-│   │   └── LanguageSwitcher.tsx
-│   ├── i18n/           # Configuración de internacionalización
-│   │   ├── config.ts
-│   │   └── locales/
-│   │       ├── es.json
-│   │       └── en.json
-│   ├── styles/         # Estilos globales
-│   │   └── index.css
-│   ├── App.tsx
-│   └── main.tsx
-├── public/             # Archivos estáticos
-├── firebase.json       # Configuración de Firebase
-└── package.json
+src/
+├── assets/profile.jpeg
+├── components/
+│   ├── Hero.tsx                 # foto, titular, perfil, datos de contacto
+│   ├── Skills.tsx               # 10 categorías de habilidades
+│   ├── Experience.tsx           # línea de tiempo laboral
+│   ├── Navbar.tsx
+│   ├── Footer.tsx
+│   ├── ExportPDF.tsx            # genera el PDF con jsPDF
+│   ├── LanguageSwitcher.tsx
+│   ├── ParticlesBackground.tsx
+│   ├── ScrollToTop.tsx
+│   └── SectionDivider.tsx
+├── i18n/
+│   ├── config.ts
+│   └── locales/{es,en}.json     # TODO el contenido del CV
+├── motion/tokens.ts             # eases, duraciones, tope de stagger
+├── styles/index.css             # tokens + primitivas .glass globales
+├── types.ts
+└── App.tsx
 ```
+
+Cada componente tiene su `.module.css` al lado.
 
 ## 🎨 Personalización
 
-### Cambiar Colores
-Edita las variables CSS en `src/styles/index.css`:
+**Contenido del CV** — todo está en `src/i18n/locales/es.json` y `en.json`:
+perfil, experiencia y habilidades. Los dos archivos deben mantenerse en paralelo;
+el PDF lee exactamente las mismas claves que la web, así que no hay que
+actualizar nada por separado.
+
+**Colores y superficies** — variables en `src/styles/index.css`:
 
 ```css
 :root {
   --color-accent-primary: #00d4ff;
   --color-accent-secondary: #7c3aed;
-  /* ... más variables */
+  --gradient-text-primary: ...;  /* usar este cuando el degradado sea TEXTO */
 }
 ```
 
-### Actualizar Contenido
-Edita los archivos de traducción:
-- Español: `src/i18n/locales/es.json`
-- Inglés: `src/i18n/locales/en.json`
+> `--gradient-primary` termina en `#7c3aed`, que queda por debajo de 3:1 sobre
+> estos fondos. Sirve para rellenos (rieles, marcadores, botones), pero para
+> texto hay que usar `--gradient-text-primary`.
 
-### Cambiar Foto de Perfil
-Reemplaza `src/assets/profile.jpeg` con tu foto.
+**Foto** — reemplazar `src/assets/profile.jpeg`.
 
-## 🌐 Ver en Producción
+## 📝 Notas de mantenimiento
 
-Una vez desplegado, tu sitio estará disponible en:
-```
-https://your-project-id.web.app
-```
-o
-```
-https://your-project-id.firebaseapp.com
-```
-
-## 📝 Notas
-
-- El sitio está optimizado para SEO con meta tags apropiados
-- Incluye Google Fonts (Inter y Outfit) para tipografía premium
-- Todas las animaciones están optimizadas para 60fps
-- El código es TypeScript-first para mejor mantenibilidad
+- Las **certificaciones no se muestran** en el sitio ni en el PDF, por decisión
+  de contenido. Sirven solo para respaldar las habilidades listadas.
+- En elementos con props de Framer Motion, **`transform` lo maneja Framer**,
+  nunca una transición CSS: si ambos lo escriben, el CSS pierde contra el estilo
+  inline y la transición se reinterpola en cada frame.
+- Las píldoras (`glass--inline`) no llevan `backdrop-filter` a propósito: una
+  píldora sobre una tarjeta de vidrio ya no tiene nada que desenfocar.
+- `html2canvas` sigue siendo una dependencia transitiva, pero **no** está en la
+  ruta de exportación del PDF. No conviene cambiarse a él: no implementa
+  `backdrop-filter`.
 
 ## 🤝 Contacto
 
-**Jhulian Ramírez**
-- 📧 Email: ramirezjhulian7@gmail.com
-- 💼 LinkedIn: [linkedin.com/in/jhulianramirez](https://www.linkedin.com/in/jhulianramirez/)
-- 📱 Phone: +57 321 884 5427
+**Jhulian Ramírez** — Arquitecto Senior de Software
+
+- 📧 [ramirezjhulian7@gmail.com](mailto:ramirezjhulian7@gmail.com)
+- 💼 [linkedin.com/in/jhulianramirez](https://www.linkedin.com/in/jhulianramirez/)
 - 📍 La Ceja, Antioquia, Colombia
-
----
-
-Desarrollado con ❤️ usando React + TypeScript + Vite
