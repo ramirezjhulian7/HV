@@ -220,10 +220,6 @@
     gap: 0.875rem;
   }
 
-  .projectBadge {
-    padding: 0.625rem 0.875rem;
-  }
-
   .cardHeader {
     flex-direction: column;
     gap: var(--spacing-md);
@@ -241,7 +237,7 @@
   .projectBadge {
     align-items: flex-start;
     width: 100%;
-    padding: var(--spacing-sm) var(--spacing-md);
+    padding: 0.625rem 0.875rem;
   }
 
   .projectName {
